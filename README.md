@@ -1,3 +1,4 @@
-# beerwrapped
+BeerWrapped
+icon_beerWrapped
 
-A new Flutter project.
+Aplicació per a Android i Web feta amb Flutter i Express.js.
