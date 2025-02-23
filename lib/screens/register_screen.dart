@@ -5,14 +5,14 @@ import '../components/custom_text_field.dart';
 import '../services/login_service.dart';
 import '../components/custom_background.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginService = LoginService();
@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _isLoading ? null : _handleLogin,
                  child: _isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('Inicia sessió'),
+                    : const Text('Registra\'t'),
               ),
               if (_errorMessage.isNotEmpty)
                 Padding(
@@ -107,42 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Row( // ROW PER AL TEXT INFERIOR
-                  mainAxisAlignment: MainAxisAlignment.center, // Centrem horitzontalment
-                  children: <Widget>[
-                    const Text(
-                      'No tens compte?',
-                      style: TextStyle(
-                        color: Color(0xFFFAF3E0), // Color FAF3E0
-                        fontFamily: 'Kameron',
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 5), // Espai entre els dos textos
-                    GestureDetector(
-                      onTap: () {
-                        // Navegar a la pàgina de registre ('register_screen')
-                        Navigator.of(context).pushNamed('/register'); // Asumeix que la ruta és '/register'
-                      },
-                      child: const Text(
-                        'Registra\'t',
-                        style: TextStyle(
-                          color: Color(0xFFFAF3E0), // Color FAF3E0
-                          fontWeight: FontWeight.bold, // Text en negreta
-                          decoration: TextDecoration.underline, // Subratllat
-                          decorationColor: Color(0xFFFAF3E0),
-                          decorationThickness: 2.5,
-                          fontFamily: 'Kameron',
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
