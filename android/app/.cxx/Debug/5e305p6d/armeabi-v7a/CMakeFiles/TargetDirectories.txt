@@ -1,0 +1,2 @@
+C:/Users/polgu/Documents/Flutter/BeerWrapped/android/app/.cxx/Debug/5e305p6d/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/polgu/Documents/Flutter/BeerWrapped/android/app/.cxx/Debug/5e305p6d/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -51,40 +51,66 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       //appBar: AppBar(title: Text('Login')),
       body: CustomBackground(
-          child: CustomTitle(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CustomTextField(
-                    labelText: 'Nom d\'usuari',
-                    controller: _usernameController,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start, // Changed to start
+            crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+            children: <Widget>[
+              const CustomTitle(), // Use CustomTitle here
+              const SizedBox(height: 30), // Space between title and container
+              Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8, // Adjust width as needed
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: const Color(0x7FFAF3E0),
+                      borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, // Fit content in Container
+                      children: <Widget>[
+                        CustomTextField(
+                          hintText: 'Nom d\'usuari',
+                          controller: _usernameController,
+                          icon: const Icon(Icons.person, color: Color(0xFFFAF3E0)),
+                        ),
+                        const SizedBox(height: 30), // Space between text fields
+                        CustomTextField(
+                          hintText: 'Contrasenya',
+                          controller: _passwordController,
+                          icon: const Icon(Icons.password, color: Color(0xFFFAF3E0)),
+                          obscureText: true,
+                        ),
+                        //const SizedBox(height: 25), // Space before button
+                      ],
+                    ),
                   ),
-                  CustomTextField(
-                    labelText: 'Contrasenya',
-                    controller: _passwordController,
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 25), // Space before button
                   ElevatedButton(
                     onPressed: _isLoading ? null : _handleLogin,
-                    child: _isLoading ? CircularProgressIndicator(): Text('Login'),
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Login'),
                   ),
-                  if(_errorMessage.isNotEmpty)
+                  if (_errorMessage.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
-                        _errorMessage, style: TextStyle(color: Colors.red),
-                      )
-                    )
+                        _errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
                 ],
-              )
-            ),
+              ),
+            ],
           ),
-        )
+        ),
+      ),
     );
   }
 }

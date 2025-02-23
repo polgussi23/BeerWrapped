@@ -138,7 +138,7 @@ class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStat
                 );
               },
             ),
-            if (widget.child != null) widget.child!, // Use widget.child
+            //if (widget.child != null) widget.child!, // Use widget.child
           ],
         ),
       ),
