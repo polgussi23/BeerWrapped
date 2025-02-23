@@ -50,8 +50,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      
       //appBar: AppBar(title: Text('Login')),
       body: CustomBackground(
         child: Padding(
@@ -61,52 +64,48 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
             children: <Widget>[
               const CustomTitle(), // Use CustomTitle here
-              const SizedBox(height: 30), // Space between title and container
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8, // Adjust width as needed
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0x7FFAF3E0),
-                      borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+              SizedBox(height: screenHeight * 0.11), // Space between title and container
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9, // Adjust width as needed
+                padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
+                decoration: BoxDecoration(
+                  color: const Color(0x7FFAF3E0),
+                  borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Fit content in Container
+                  children: <Widget>[
+                    CustomTextField(
+                      hintText: 'Usuari',
+                      controller: _usernameController,
+                      icon: const Icon(Icons.person, color: Color(0xFFFAF3E0)),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min, // Fit content in Container
-                      children: <Widget>[
-                        CustomTextField(
-                          hintText: 'Nom d\'usuari',
-                          controller: _usernameController,
-                          icon: const Icon(Icons.person, color: Color(0xFFFAF3E0)),
-                        ),
-                        const SizedBox(height: 30), // Space between text fields
-                        CustomTextField(
-                          hintText: 'Contrasenya',
-                          controller: _passwordController,
-                          icon: const Icon(Icons.password, color: Color(0xFFFAF3E0)),
-                          obscureText: true,
-                        ),
-                        //const SizedBox(height: 25), // Space before button
-                      ],
+                    const SizedBox(height: 30), // Space between text fields
+                    CustomTextField(
+                      hintText: 'Contrasenya',
+                      controller: _passwordController,
+                      icon: const Icon(Icons.password, color: Color(0xFFFAF3E0)),
+                      obscureText: true,
                     ),
-                  ),
-                  const SizedBox(height: 25), // Space before button
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _handleLogin,
-                    child: _isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('Login'),
-                  ),
-                  if (_errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        _errorMessage,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    ),
-                ],
+                    //const SizedBox(height: 25), // Space before button
+                  ],
+                ),
               ),
+              const SizedBox(height: 25), // Space before button
+              ElevatedButton(
+                onPressed: _isLoading ? null : _handleLogin,
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Login'),
+              ),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
             ],
           ),
         ),

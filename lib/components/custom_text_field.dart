@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5), // Color de l'ombra
+              color: Colors.black.withOpacity(0.7), // Color de l'ombra
               offset: const Offset(3, 3), // Posició: dreta i avall
               blurRadius: 5, // Difuminació de l'ombra
             ),
@@ -33,7 +33,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           style: const TextStyle(color: Color(0xC2FAF3E0), fontFamily: 'Kameron', fontSize: 20),
-          cursorColor: Color(0XFFFAF3E0),
+          cursorColor: const Color(0XFFFAF3E0),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: const TextStyle(color: Color(0x7AFAF3E0), fontFamily: 'Kameron'),
