@@ -1,3 +1,4 @@
+import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      
+
       //appBar: AppBar(title: Text('Login')),
       body: CustomBackground(
         child: Padding(
@@ -92,11 +93,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 25), // Space before button
-              ElevatedButton(
+              /*ElevatedButton(
                 onPressed: _isLoading ? null : _handleLogin,
                 child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Login'),
+              ),*/
+              CustomButton(
+                onPressed: _isLoading ? null : _handleLogin,
+                 child: _isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('Login'),
+                    : const Text('Inicia sessió'),
               ),
               if (_errorMessage.isNotEmpty)
                 Padding(
@@ -106,6 +113,39 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
+              const Spacer(), // <-- AFEGIT SPACER AQUÍ
+              Row( // ROW PER AL TEXT INFERIOR
+                mainAxisAlignment: MainAxisAlignment.center, // Centrem horitzontalment
+                children: <Widget>[
+                  const Text(
+                    'No tens compte?',
+                    style: TextStyle(
+                      color: Color(0xFFFAF3E0), // Color FAF3E0
+                      fontFamily: 'Kameron',
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 5), // Espai entre els dos textos
+                  GestureDetector(
+                    onTap: () {
+                      // Navegar a la pàgina de registre ('register_screen')
+                      Navigator.of(context).pushNamed('/register'); // Asumeix que la ruta és '/register'
+                    },
+                    child: const Text(
+                      'Registra\'t',
+                      style: TextStyle(
+                        color: Color(0xFFFAF3E0), // Color FAF3E0
+                        fontWeight: FontWeight.bold, // Text en negreta
+                        decoration: TextDecoration.underline, // Subratllat
+                        decorationColor: Color(0xFFFAF3E0),
+                        decorationThickness: 2.5,
+                        fontFamily: 'Kameron',
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
