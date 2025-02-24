@@ -2,7 +2,6 @@ import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
-import '../services/login_service.dart';
 import '../components/custom_background.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,12 +14,13 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _loginService = LoginService();
+  final _emailController = TextEditingController();
+  //final _loginService = LoginService();
   String _errorMessage = '';
 
   bool _isLoading = false;
 
-  Future<void> _handleLogin() async {
+  /*Future<void> _handleLogin() async {
     setState(() {
       _isLoading = true;
       _errorMessage = '';
@@ -47,69 +47,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _isLoading = false;
       });
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
 
       //appBar: AppBar(title: Text('Login')),
-      body: CustomBackground(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // Changed to start
-            crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
-            children: <Widget>[
-              const CustomTitle(), // Use CustomTitle here
-              SizedBox(height: screenHeight * 0.11), // Space between title and container
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9, // Adjust width as needed
-                padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
-                decoration: BoxDecoration(
-                  color: const Color(0x7FFAF3E0),
-                  borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min, // Fit content in Container
-                  children: <Widget>[
-                    CustomTextField(
-                      hintText: 'Usuari',
-                      controller: _usernameController,
-                      icon: const Icon(Icons.person, color: Color(0xFFFAF3E0)),
+      body: Stack(
+        children: [
+          const CustomBackground(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start, // Changed to start
+                crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+                children: <Widget>[
+                  const CustomTitle(), // Use CustomTitle here
+                  SizedBox(height: screenHeight * 0.11), // Space between title and container
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9, // Adjust width as needed
+                    padding: EdgeInsets.symmetric(vertical: screenHeight*0.025, horizontal: 40.0),
+                    decoration: BoxDecoration(
+                      color: const Color(0x7FFAF3E0),
+                      borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
                     ),
-                    const SizedBox(height: 30), // Space between text fields
-                    CustomTextField(
-                      hintText: 'Contrasenya',
-                      controller: _passwordController,
-                      icon: const Icon(Icons.password, color: Color(0xFFFAF3E0)),
-                      obscureText: true,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, // Fit content in Container
+                      children: <Widget>[
+                        CustomTextField(
+                          hintText: 'Nom d\'usuari',
+                          controller: _usernameController,
+                          icon: const Icon(Icons.person, color: Color(0xFFFAF3E0)),
+                        ),
+                        SizedBox(height: screenHeight*0.04),
+                        CustomTextField(
+                          hintText: 'Correu',
+                          controller: _emailController,
+                          icon: const Icon(Icons.email, color: Color(0xFFFAF3E0)),
+                        ),
+                        SizedBox(height: screenHeight*0.04), // Space between text fields
+                        CustomTextField(
+                          hintText: 'Contrasenya',
+                          controller: _passwordController,
+                          icon: const Icon(Icons.password, color: Color(0xFFFAF3E0)),
+                          obscureText: true,
+                        ),
+                        //const SizedBox(height: 25), // Space before button
+                      ],
                     ),
-                    //const SizedBox(height: 25), // Space before button
-                  ],
-                ),
-              ),
-              const SizedBox(height: 50), // Space before button
-              CustomButton(
-                onPressed: _isLoading ? null : _handleLogin,
-                 child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Registra\'t'),
-              ),
-              if (_errorMessage.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    _errorMessage,
-                    style: const TextStyle(color: Colors.red),
                   ),
-                ),
-            ],
+                  SizedBox(height: screenHeight*0.075), // Space before button
+                  CustomButton(
+                    onPressed: _isLoading ? null : null,  //_handleLogin,
+                     child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Registra\'t'),
+                  ),
+                  if (_errorMessage.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        _errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ]
       ),
     );
   }

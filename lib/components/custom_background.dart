@@ -5,16 +5,22 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class CustomBackground extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   const CustomBackground({
     Key? key,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQueryData.fromView(View.of(context)); // Manté la mida sense que el teclat afecti
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    
     return Container(
+      width: screenWidth,          // Forcem l'amplada del Container a ser tota l'amplada de la pantalla
+      height: screenHeight,         // Forcem l'altura del Container a ser tota l'altura de la pantalla
       color: Color(0xFF333333), // Color de fons gris fosc (podeu ajustar-lo)
       child: Stack(
         children: [
@@ -46,7 +52,7 @@ class CustomBackground extends StatelessWidget {
           ),
           // Imatge cervesa "spitting_beer" (inferior centre)
           Positioned(
-            bottom: -MediaQuery.of(context).size.height * 0.08, // Posició inferior una mica fora de la pantalla per a que sembli tallada
+            top: screenHeight * 0.43, // Posició inferior una mica fora de la pantalla per a que sembli tallada
             //left: -50, // Posició esquerra per centrar-la horitzontalment aproximadament
             right: -MediaQuery.of(context).size.width*0.3, // Posició dreta per centrar-la horitzontalment aproximadament
             child: Transform.rotate(
@@ -60,7 +66,8 @@ class CustomBackground extends StatelessWidget {
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            child: child, // Contingut de la pantalla
+            child: const SizedBox(height: 0),
+            //child: child, // Contingut de la pantalla
           ),
         ],
       ),
