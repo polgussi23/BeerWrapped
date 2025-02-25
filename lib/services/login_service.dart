@@ -1,14 +1,18 @@
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import '../models/login_response.dart';
 
 class LoginService{
   Future<LoginResponse> loginUser(String username, String password) async{
-    final Uri apiUrl = Uri.parse('https://polgussi.cat:3001/login');
+    
+    final String apiUrlBase = dotenv.env['API_URL'] ?? 'http://217.160.2.122:3100';
+    
+    final Uri apiUrlLogin = Uri.parse('$apiUrlBase/api/auth/login');
     
     try{
       final response = await http.post(
-        apiUrl,
+        apiUrlLogin,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
