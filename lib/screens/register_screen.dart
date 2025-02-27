@@ -1,5 +1,6 @@
 import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
+import 'package:beerwrapped/services/register_service.dart';
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
 import '../components/custom_background.dart';
@@ -15,23 +16,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
-  //final _loginService = LoginService();
+  final _registerService = RegisterService();
   String _errorMessage = '';
 
   bool _isLoading = false;
 
-  /*Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
 
     try{
-      final response = await _loginService.loginUser(
+      
+      _checkControllers(_usernameController.text, _emailController.text, _passwordController.text);
+      
+      final response = await _registerService.registerUser(
         _usernameController.text,
+        _emailController.text,
         _passwordController.text,
       );
-      print('Login exitós! Token: ${response.token}, User ID: ${response.userId}');
+      print('Registre exitós! Token: ${response.token}, User ID: ${response.userId}');
       // TODO: Navegar a la següent pantalla
       // Exemple de navegació (s'hauran de configurar les rutes a 'app.dart' o 'main.dart')
       // Navigator.of(context).pushReplacementNamed('/home');
@@ -41,13 +46,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
       });
 
-      print('Error en el login: $error');
+      print('Error en el registre: $error');
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
-  }*/
+  }
+
+  void _checkControllers(String u, String e, String p){
+    if(u=='' || e=='' || p==''){
+      throw Exception('Has d\'emplenar tots els camps!');
+    }
+    _checkEmail(e);
+  }
+
+  void _checkEmail(String email){
+    // email: xx@xx.xx
+    //var l = email.split('@');
+    //var domain = l[1].split('.');
+    //if(l.length != 2 || domain.length < 2) throw Exception('Email amb format invàlid');
+    if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)) throw Exception('Email amb format invàlid');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: screenHeight*0.075), // Space before button
                   CustomButton(
-                    onPressed: _isLoading ? null : null,  //_handleLogin,
+                    onPressed: _isLoading ? null : _handleRegister,  //_handleLogin,
                      child: _isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Registra\'t'),
