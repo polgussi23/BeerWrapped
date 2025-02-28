@@ -1,13 +1,17 @@
 class LoginResponse{
   final String token;
-  final String userId;
+  final int userId;
+  final String message;
+  final String? startDay;
 
-  LoginResponse({required this.token, required this.userId});
+  LoginResponse({required this.token, required this.userId, required this.message, this.startDay});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json){
     return LoginResponse(
       token: json['token'],
-      userId: json['message'],
+      message: json['message'],
+      userId: json['userId'],
+      startDay: json['startDay'] ?? '',
     );
   }
 }

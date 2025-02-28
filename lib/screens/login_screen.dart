@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text,
         _passwordController.text,
       );
-      print('Login exitós! Token: ${response.token}, User ID: ${response.userId}');
+      print('Login exitós! Token: ${response.token}, User ID: ${response.userId}, StartDay: ${response.startDay}, Message: ${response.message}');
       // TODO: Navegar a la següent pantalla
       // Exemple de navegació (s'hauran de configurar les rutes a 'app.dart' o 'main.dart')
       // Navigator.of(context).pushReplacementNamed('/home');
