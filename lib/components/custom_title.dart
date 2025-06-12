@@ -40,8 +40,9 @@ class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final beerFontSize = screenHeight * 0.11;
-    final wrappedFontSize = screenHeight * 0.08;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final beerFontSize = math.min(screenHeight * 0.11, screenWidth * 0.2);
+    final wrappedFontSize = math.min(screenHeight * 0.08, screenWidth * 0.15);
 
     return Container(
       alignment: Alignment.topCenter,
