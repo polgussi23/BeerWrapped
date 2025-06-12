@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Login exitós! Token: ${response.token}, User ID: ${response.userId}, StartDay: ${response.startDay}, Message: ${response.message}');
       // TODO: Navegar a la següent pantalla
       // Exemple de navegació (s'hauran de configurar les rutes a 'app.dart' o 'main.dart')
-      // Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/chooseDay');
 
     } catch (error){
       setState(() {
@@ -54,9 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
-
-      //appBar: AppBar(title: Text('Login')),
       body: Stack(
         children: [
           const CustomBackground(),
