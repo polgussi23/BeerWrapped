@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../components/custom_background.dart';
 import '../components/custom_date_chooser.dart';
 import '../components/date_selection_info_row.dart';
+import '../components/custom_logout_button.dart';
 import 'package:intl/intl.dart';
 
 class ChooseDayScreen extends StatefulWidget {
@@ -77,13 +78,19 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
                     child: const Text('TRIA'),
                   ),
                   SizedBox(height: screenHeight * 0.15),
-                  CustomButton(
+                  LogoutButton(
+                    onPressed: () {
+                      print('Tanca la sessió');
+                      
+                    },
+                  ),
+                  /*CustomButton(
                     onPressed: () {
                       print('Tanca la sessió');
                     },
                     //backgroundColor: Colors.red,
                     child: const Text('Tanca la sessió'),
-                  ),
+                  ),*/
                 ],
               ),
             ),
