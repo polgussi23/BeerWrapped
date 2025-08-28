@@ -24,7 +24,8 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width; // Obtenemos el ancho de la pantalla
+    final screenWidth =
+        MediaQuery.of(context).size.width; // Obtenemos el ancho de la pantalla
 
     return Scaffold(
       body: Stack(
@@ -38,18 +39,25 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const CustomTitle(),
-                  SizedBox(height: screenHeight * 0.10), // Espacio después del título
+                  SizedBox(
+                      height:
+                          screenHeight * 0.10), // Espacio después del título
 
                   // Usamos un Stack para superponer los elementos
                   Stack(
-                    clipBehavior: Clip.none, // Permite que los hijos se desborden de los límites del Stack
-                    alignment: Alignment.center, // Centra los hijos horizontalmente dentro del Stack
+                    clipBehavior: Clip
+                        .none, // Permite que los hijos se desborden de los límites del Stack
+                    alignment: Alignment
+                        .center, // Centra los hijos horizontalmente dentro del Stack
                     children: [
                       // El Container de la fecha (el "fondo")
                       Container(
                         width: screenWidth * 0.9,
-                        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025, horizontal: 40.0),
-                        margin: EdgeInsets.only(top: screenHeight * 0.05), // Añadimos un margen superior para que el DateSelectionInfoRow pueda sobresalir
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.025, horizontal: 40.0),
+                        margin: EdgeInsets.only(
+                            top: screenHeight *
+                                0.05), // Añadimos un margen superior para que el DateSelectionInfoRow pueda sobresalir
                         decoration: BoxDecoration(
                           color: const Color(0x7FFAF3E0),
                           borderRadius: BorderRadius.circular(10.0),
@@ -66,7 +74,8 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
                       ),
                       // El DateSelectionInfoRow (el que sobresale)
                       const Positioned(
-                        top: 15, // Lo posicionamos en la parte superior del Stack
+                        top:
+                            15, // Lo posicionamos en la parte superior del Stack
                         child: DateSelectionInfoRow(),
                       ),
                     ],
@@ -81,16 +90,8 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
                   LogoutButton(
                     onPressed: () {
                       print('Tanca la sessió');
-                      
                     },
                   ),
-                  /*CustomButton(
-                    onPressed: () {
-                      print('Tanca la sessió');
-                    },
-                    //backgroundColor: Colors.red,
-                    child: const Text('Tanca la sessió'),
-                  ),*/
                 ],
               ),
             ),
