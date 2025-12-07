@@ -1,6 +1,9 @@
 import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
+import 'package:beerwrapped/providers/user_provider.dart';
+import 'package:beerwrapped/services/startDay_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../components/custom_background.dart';
 import '../components/custom_date_chooser.dart';
 import '../components/date_selection_info_row.dart';
@@ -15,10 +18,41 @@ class ChooseDayScreen extends StatefulWidget {
 }
 
 class _ChooseDayScreenState extends State<ChooseDayScreen> {
+  final _startDayService = StartDateService();
   DateTime _selectedDate = DateTime.now();
 
-  void _handleChooseDay() {
-    print('Data triada: ${DateFormat('dd/MM/yyyy').format(_selectedDate)}');
+  String _errorMessage = '';
+  bool _isLoading = false;
+
+  Future<void> _handleChooseDay() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    //1. Quin usuari soc?
+    int userId = context.read<UserProvider>().getUserId() ?? 0;
+    //2. Quina data vull enviar?
+    // _selectedDate
+
+    //3. Envio el meu usuari i la data a la API
+    print('Data triada: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}');
+
+    try {
+      await _startDayService.setStartDate(
+          userId, DateFormat('yyyy-MM-dd').format(_selectedDate));
+      print("Data afegida correctament!");
+    } catch (error) {
+      setState(() {
+        _errorMessage = error.toString().replaceAll('Exception: ', '');
+      });
+
+      print('Error en afegir startDay: $error');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+    //await StartDateService.setStartDate(userId, _selectedDate);
   }
 
   @override
@@ -83,8 +117,10 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
 
                   SizedBox(height: screenHeight * 0.04),
                   CustomButton(
-                    onPressed: _handleChooseDay,
-                    child: const Text('TRIA'),
+                    onPressed: _isLoading ? null : _handleChooseDay,
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('TRIA'),
                   ),
                   SizedBox(height: screenHeight * 0.15),
                   LogoutButton(

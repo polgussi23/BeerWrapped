@@ -4,16 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogoutService {
-  Future<String> logoutUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storage = FlutterSecureStorage();
-    final refreshToken = await storage.read(
-        key: 'refreshToken'); //RefreshToken a enviar al servidor
-
-    // Eliminem el refreshToken del almacenamiento seguro
-    await storage.delete(key: 'refreshToken');
-    await prefs.clear(); // Eliminem totes les dades de SharedPreferences
-
+  Future<String> logoutUser(String? refreshToken) async {
     final String apiUrlBase =
         dotenv.env['API_URL'] ?? 'http://217.160.2.122:3100';
 

@@ -1,5 +1,7 @@
+import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:beerwrapped/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/chooseDay_screen.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    context.read<UserProvider>().loadSession();
     return MaterialApp(
       title: 'Beer Wrapped',
       theme: ThemeData(

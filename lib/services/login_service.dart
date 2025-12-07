@@ -1,7 +1,6 @@
+import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import '../models/login_response.dart';
 
@@ -26,14 +25,7 @@ class LoginService {
 
       if (response.statusCode == 200) {
         //Guardem els tokens a l'app (accessToken i refreshToken)
-        final r = LoginResponse.fromJson(jsonDecode(response.body));
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(
-            'accessToken', r.accessToken); // AccessToken a SharedPreferences
-        final storage = FlutterSecureStorage();
-        await storage.write(
-            key: 'refreshToken',
-            value: r.refreshToken); // RefreshToken a FlutterSecureStorage
+        final r = LoginResponse.fromJson(jsonDecode(response.body), username);
         return r;
       } else if (response.statusCode == 401) {
         throw Exception('Usuari o contrasenya incorrecte.');

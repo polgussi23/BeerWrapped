@@ -1,5 +1,7 @@
+import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:beerwrapped/services/logout_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
 class LogoutButton extends StatelessWidget {
@@ -10,11 +12,13 @@ class LogoutButton extends StatelessWidget {
   void closeSession(BuildContext context) async {
     final logoutService = LogoutService();
     try {
-      await logoutService.logoutUser();
+      await logoutService
+          .logoutUser(context.read<UserProvider>().getRefreshToken());
     } catch (e) {
       print('Error logging out: $e');
     }
 
+    context.read<UserProvider>().logout();
     Navigator.of(context).pushReplacementNamed('/login');
   }
 

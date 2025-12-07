@@ -1,6 +1,8 @@
 import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
+import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import '../components/custom_text_field.dart';
 import '../services/login_service.dart';
@@ -35,8 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
       //S'ha logejat correctament, per tant guardem token per a no haver de tornar a iniciar sessió en un futur
       //final prefs = await SharedPreferences.getInstance();
       //await prefs.setString('accessToken', response.accessToken);
+
       print(
           'Login exitós! Token: ${response.accessToken}, User ID: ${response.userId}, StartDay: ${response.startDay}, Message: ${response.message}');
+      await context.read<UserProvider>().setSessionFromLoginResponse(response);
       Navigator.of(context).pushReplacementNamed('/chooseDay');
     } catch (error) {
       setState(() {

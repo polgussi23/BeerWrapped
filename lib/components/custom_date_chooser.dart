@@ -40,7 +40,7 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _currentSelectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -60,7 +60,8 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
     if (picked != null && picked != _currentSelectedDate) {
       setState(() {
         _currentSelectedDate = picked;
-        _dateController.text = DateFormat('dd/MM/yyyy', 'ca').format(_currentSelectedDate);
+        _dateController.text =
+            DateFormat('dd/MM/yyyy', 'ca').format(_currentSelectedDate);
         widget.onDateSelected(_currentSelectedDate);
       });
     }
@@ -73,7 +74,8 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
     // Obtener el tamaño intrínseco del icono para replicarlo en el suffixIcon
     // IconTheme.of(context).size es el tamaño por defecto de los iconos.
     // Si tu icono tiene un tamaño diferente, ajusta aquí.
-    final double iconSize = IconTheme.of(context).size ?? 24.0; // Valor por defecto si es null
+    final double iconSize =
+        IconTheme.of(context).size ?? 24.0; // Valor por defecto si es null
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -94,13 +96,19 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
             controller: _dateController,
             readOnly: true, // No permite escribir manualmente
             onTap: () => _selectDate(context), // Abre el selector al tocar
-            style: TextStyle(color: const Color(0xC2FAF3E0), fontFamily: 'Kameron', fontSize: screenHeight * 0.025),
+            style: TextStyle(
+                color: const Color(0xC2FAF3E0),
+                fontFamily: 'Kameron',
+                fontSize: screenHeight * 0.025),
             cursorColor: const Color(0XFFFAF3E0),
-            textAlign: TextAlign.center, // <--- Esta es la línea clave para centrar el texto
+            textAlign: TextAlign
+                .center, // <--- Esta es la línea clave para centrar el texto
             decoration: InputDecoration(
               hintText: widget.hintText,
-              hintStyle: const TextStyle(color: Color(0x7AFAF3E0), fontFamily: 'Kameron'),
-              contentPadding: const EdgeInsets.symmetric(vertical: -2), // Ajusta el padding si es necesario
+              hintStyle: const TextStyle(
+                  color: Color(0x7AFAF3E0), fontFamily: 'Kameron'),
+              contentPadding: const EdgeInsets.symmetric(
+                  vertical: -2), // Ajusta el padding si es necesario
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -114,9 +122,12 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
               ),
               filled: true,
               fillColor: const Color(0xE62C2C2C),
-              prefixIcon: const Icon(Icons.calendar_month, color: Color(0xFFFAF3E0)), // El icono a la izquierda
+              prefixIcon: const Icon(Icons.calendar_month,
+                  color: Color(0xFFFAF3E0)), // El icono a la izquierda
               // Añadir un suffixIcon "fantasma" para equilibrar el espacio
-              suffixIcon: SizedBox(width: iconSize), // Ajusta el ancho para que coincida con el prefixIcon.
+              suffixIcon: SizedBox(
+                  width:
+                      iconSize), // Ajusta el ancho para que coincida con el prefixIcon.
             ),
           ),
         ),
