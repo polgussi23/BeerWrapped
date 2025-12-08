@@ -3,9 +3,7 @@ import 'package:beerwrapped/components/custom_title.dart';
 import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:beerwrapped/services/register_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../components/custom_text_field.dart';
 import '../components/custom_background.dart';
 

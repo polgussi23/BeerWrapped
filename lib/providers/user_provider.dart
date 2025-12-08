@@ -61,9 +61,12 @@ class UserProvider extends ChangeNotifier {
     _accessToken = await _storage.read(key: 'accessToken');
     _refreshToken = await _storage.read(key: 'refreshToken');
 
-    if (_accessToken != null) {
-      ApiClient().setAuthToken(_accessToken);
-    }
+    ApiClient().configure(
+      accessToken: _accessToken,
+      refreshToken: _refreshToken,
+      onRefreshed: _handleTokensRefreshed, // Li passem la funció de dalt
+      onExpired: _handleSessionExpired, // Li passem la funció de logout
+    );
 
     notifyListeners();
   }
@@ -90,9 +93,13 @@ class UserProvider extends ChangeNotifier {
 
     await _storage.write(key: 'accessToken', value: r.accessToken);
     await _storage.write(key: 'refreshToken', value: r.refreshToken);
-    if (_accessToken != null) {
-      ApiClient().setAuthToken(_accessToken);
-    }
+
+    ApiClient().configure(
+      accessToken: r.accessToken,
+      refreshToken: r.refreshToken,
+      onRefreshed: _handleTokensRefreshed,
+      onExpired: _handleSessionExpired,
+    );
   }
 
   Future<void> setSessionFromRegisterResponse(RegisterResponse r) async {
@@ -108,9 +115,13 @@ class UserProvider extends ChangeNotifier {
 
     await _storage.write(key: 'accessToken', value: r.accessToken);
     await _storage.write(key: 'refreshToken', value: r.refreshToken);
-    if (_accessToken != null) {
-      ApiClient().setAuthToken(_accessToken);
-    }
+
+    ApiClient().configure(
+      accessToken: r.accessToken,
+      refreshToken: r.refreshToken,
+      onRefreshed: _handleTokensRefreshed,
+      onExpired: _handleSessionExpired,
+    );
   }
 
   Future<void> setSession(int id, String username, DateTime startDay,
@@ -129,9 +140,24 @@ class UserProvider extends ChangeNotifier {
 
     await _storage.write(key: 'accessToken', value: access);
     await _storage.write(key: 'refreshToken', value: refresh);
-    if (_accessToken != null) {
-      ApiClient().setAuthToken(_accessToken);
-    }
+  }
+
+  void _handleTokensRefreshed(String newAccess, String newRefresh) {
+    _accessToken = newAccess;
+    _refreshToken = newRefresh;
+
+    // Guardem al disc silenciosament
+    _storage.write(key: 'accessToken', value: newAccess);
+    _storage.write(key: 'refreshToken', value: newRefresh);
+
+    // No cal fer notifyListeners() perquè la UI no canvia, només la sessió interna
+    print(
+        "Tokens actualitzats i guardats al disc correctament via UserProvider");
+  }
+
+  // Aquesta funció s'executa si el refresh falla (el refresh token ha caducat)
+  void _handleSessionExpired() {
+    logout(); // Això esborra tot i la UI redirigirà al Login
   }
 
   Future<void> logout() async {

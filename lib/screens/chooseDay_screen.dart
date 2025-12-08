@@ -46,7 +46,7 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
       });
 
-      print('Error en afegir startDay: $error');
+      print('Error en afegir startDay: $_errorMessage');
     } finally {
       setState(() {
         _isLoading = false;
