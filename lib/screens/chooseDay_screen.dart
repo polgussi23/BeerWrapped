@@ -35,12 +35,12 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
     // _selectedDate
 
     //3. Envio el meu usuari i la data a la API
-    print('Data triada: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}');
-
     try {
       await _startDayService.setStartDate(
           userId, DateFormat('yyyy-MM-dd').format(_selectedDate));
       print("Data afegida correctament!");
+      context.read<UserProvider>().setStartDay(_selectedDate);
+      Navigator.of(context).pushReplacementNamed('/waittostart');
     } catch (error) {
       setState(() {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
@@ -52,7 +52,6 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
         _isLoading = false;
       });
     }
-    //await StartDateService.setStartDate(userId, _selectedDate);
   }
 
   @override

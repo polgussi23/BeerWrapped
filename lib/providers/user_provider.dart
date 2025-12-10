@@ -41,6 +41,10 @@ class UserProvider extends ChangeNotifier {
     return _username;
   }
 
+  DateTime? getStartDay() {
+    return _startDay;
+  }
+
   Future<void> loadSession() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -50,7 +54,7 @@ class UserProvider extends ChangeNotifier {
     try {
       final dateStr = prefs.getString('startDay');
       if (dateStr != null && dateStr.isNotEmpty) {
-        _startDay = DateFormat('dd/MM/yyyy', 'ca').parse(dateStr);
+        _startDay = DateFormat('yyyy-MM-dd', 'ca').parse(dateStr);
       }
     } catch (e) {
       print("Error llegint la data: $e");
@@ -78,7 +82,7 @@ class UserProvider extends ChangeNotifier {
     try {
       final dateStr = r.startDay;
       if (dateStr != null && dateStr.isNotEmpty) {
-        _startDay = DateFormat('dd/MM/yyyy', 'ca').parse(dateStr);
+        _startDay = DateFormat('yyyy-MM-dd', 'ca').parse(dateStr);
       }
     } catch (e) {
       print("Error llegint la data: $e");
@@ -100,6 +104,10 @@ class UserProvider extends ChangeNotifier {
       onRefreshed: _handleTokensRefreshed,
       onExpired: _handleSessionExpired,
     );
+  }
+
+  void setStartDay(DateTime startDay) {
+    _startDay = startDay;
   }
 
   Future<void> setSessionFromRegisterResponse(RegisterResponse r) async {

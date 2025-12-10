@@ -25,10 +25,17 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!context.read<UserProvider>().isLogged()) {
       Navigator.pushReplacementNamed(context, '/login');
     } else {
+      //Si l'usuari té data de començament i és més gran que la data actual, anem a waitToStart_screen.dart
       UserProvider up = context.read<UserProvider>();
       print(
           "Connectat automàticament: userId: ${up.getUserId()}, username: ${up.getUsername()}, refreshToken: ${up.getRefreshToken()}");
-      Navigator.pushReplacementNamed(context, '/chooseDay');
+
+      DateTime? startDay = up.getStartDay();
+
+      if (startDay != null && startDay.difference(DateTime.now()).inDays > 0)
+        Navigator.pushReplacementNamed(context, '/waittostart');
+      else
+        Navigator.pushReplacementNamed(context, '/chooseDay');
     }
   }
 

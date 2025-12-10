@@ -1,5 +1,6 @@
 import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:beerwrapped/screens/splash_screen.dart';
+import 'package:beerwrapped/screens/waitToStart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/chooseDay': (context) => const ChooseDayScreen(),
+        '/waittostart': (context) => const WaittostartScreen(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

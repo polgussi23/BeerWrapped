@@ -37,11 +37,19 @@ class _LoginScreenState extends State<LoginScreen> {
       //S'ha logejat correctament, per tant guardem token per a no haver de tornar a iniciar sessió en un futur
       //final prefs = await SharedPreferences.getInstance();
       //await prefs.setString('accessToken', response.accessToken);
+      UserProvider up = context.read<UserProvider>();
 
       print(
           'Login exitós! Token: ${response.accessToken}, User ID: ${response.userId}, StartDay: ${response.startDay}, Message: ${response.message}');
-      await context.read<UserProvider>().setSessionFromLoginResponse(response);
-      Navigator.of(context).pushReplacementNamed('/chooseDay');
+      await up.setSessionFromLoginResponse(response);
+
+      DateTime? startDay = up.getStartDay();
+
+      if (startDay != null && startDay.difference(DateTime.now()).inDays > 0) {
+        Navigator.pushReplacementNamed(context, '/waittostart');
+      } else {
+        Navigator.pushReplacementNamed(context, '/chooseDay');
+      }
     } catch (error) {
       setState(() {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
