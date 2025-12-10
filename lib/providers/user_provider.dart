@@ -106,8 +106,12 @@ class UserProvider extends ChangeNotifier {
     );
   }
 
-  void setStartDay(DateTime startDay) {
+  void setStartDay(DateTime startDay) async {
     _startDay = startDay;
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'startDay', DateFormat('yyyy-MM-dd', 'ca').format(startDay));
   }
 
   Future<void> setSessionFromRegisterResponse(RegisterResponse r) async {

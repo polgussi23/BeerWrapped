@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           "Connectat automàticament: userId: ${up.getUserId()}, username: ${up.getUsername()}, refreshToken: ${up.getRefreshToken()}");
 
       DateTime? startDay = up.getStartDay();
+      print(startDay);
 
       if (startDay != null && startDay.difference(DateTime.now()).inDays > 0)
         Navigator.pushReplacementNamed(context, '/waittostart');

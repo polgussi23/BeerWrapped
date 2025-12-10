@@ -12,8 +12,8 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
   String _startingDay = "";
   int _daysLeft = 0;
 
-  @override
-  void initState() {}
+  //@override
+  //void initState() {}
 
   void _getStartingDay() {
     DateTime? date = context.read<UserProvider>().getStartDay();

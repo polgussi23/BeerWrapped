@@ -2,10 +2,7 @@ import 'package:beerwrapped/components/custom_background.dart';
 import 'package:beerwrapped/components/custom_days_left_card.dart';
 import 'package:beerwrapped/components/custom_logout_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
-import 'package:beerwrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class WaittostartScreen extends StatefulWidget {
   const WaittostartScreen({Key? key}) : super(key: key);
