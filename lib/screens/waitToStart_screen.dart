@@ -1,8 +1,8 @@
-import 'package:beerwrapped/components/custom_background.dart';
-import 'package:beerwrapped/components/custom_button.dart';
-import 'package:beerwrapped/components/custom_days_left_card.dart';
-import 'package:beerwrapped/components/custom_logout_button.dart';
-import 'package:beerwrapped/components/custom_title.dart';
+import 'package:birrawrapped/components/custom_background.dart';
+import 'package:birrawrapped/components/custom_button.dart';
+import 'package:birrawrapped/components/custom_days_left_card.dart';
+import 'package:birrawrapped/components/custom_logout_button.dart';
+import 'package:birrawrapped/components/custom_title.dart';
 import 'package:flutter/material.dart';
 
 class WaittostartScreen extends StatefulWidget {

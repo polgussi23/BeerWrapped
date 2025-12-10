@@ -1,4 +1,4 @@
-import 'package:beerwrapped/providers/user_provider.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

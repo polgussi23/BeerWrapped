@@ -14,16 +14,20 @@ class CustomBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQueryData.fromView(View.of(context)); // Manté la mida sense que el teclat afecti
+    final mediaQuery = MediaQueryData.fromView(
+        View.of(context)); // Manté la mida sense que el teclat afecti
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
 
-    final spittingBeerImageHeight = screenHeight * 0.65;
-    final spittingBeerImageWidth = spittingBeerImageHeight / 1.168; // 1.168 és la relació entre amplada i altura de la imatge original!
-    
+    final spittingBirraImageHeight = screenHeight * 0.65;
+    final spittingBirraImageWidth = spittingBirraImageHeight /
+        1.168; // 1.168 és la relació entre amplada i altura de la imatge original!
+
     return Container(
-      width: screenWidth,          // Forcem l'amplada del Container a ser tota l'amplada de la pantalla
-      height: screenHeight,         // Forcem l'altura del Container a ser tota l'altura de la pantalla
+      width:
+          screenWidth, // Forcem l'amplada del Container a ser tota l'amplada de la pantalla
+      height:
+          screenHeight, // Forcem l'altura del Container a ser tota l'altura de la pantalla
       color: Color(0xFF333333), // Color de fons gris fosc (podeu ajustar-lo)
       child: Stack(
         children: [
@@ -34,9 +38,11 @@ class CustomBackground extends StatelessWidget {
             child: Transform.rotate(
               angle: degreesToRadians(-16),
               child: Image.asset(
-                'assets/images/minimalist_beer.png', // Ruta a la imatge cervesa minimalista
-                height: MediaQuery.of(context).size.height * 0.22, // Ajusta l'amplada segons necessitis
-                opacity: AlwaysStoppedAnimation(0.5), // Redueix l'opacitat una mica
+                'assets/images/minimalist_birra.png', // Ruta a la imatge cervesa minimalista
+                height: MediaQuery.of(context).size.height *
+                    0.22, // Ajusta l'amplada segons necessitis
+                opacity:
+                    AlwaysStoppedAnimation(0.5), // Redueix l'opacitat una mica
               ),
             ),
           ),
@@ -44,27 +50,33 @@ class CustomBackground extends StatelessWidget {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.12,
             right: MediaQuery.of(context).size.width * 0.1,
-            child: Transform.rotate( // Rotem la imatge per a que sigui similar a l'exemple
-              angle: degreesToRadians(14), // Un petit angle de rotació en radians (podeu ajustar-lo)
+            child: Transform.rotate(
+              // Rotem la imatge per a que sigui similar a l'exemple
+              angle: degreesToRadians(
+                  14), // Un petit angle de rotació en radians (podeu ajustar-lo)
               child: Image.asset(
-                'assets/images/minimalist_beer.png', // Ruta a la imatge cervesa minimalista
-                height: MediaQuery.of(context).size.height * 0.22, // Ajusta l'amplada
-                opacity: AlwaysStoppedAnimation(0.5), // Redueix l'opacitat una mica
+                'assets/images/minimalist_birra.png', // Ruta a la imatge cervesa minimalista
+                height: MediaQuery.of(context).size.height *
+                    0.22, // Ajusta l'amplada
+                opacity:
+                    AlwaysStoppedAnimation(0.5), // Redueix l'opacitat una mica
               ),
             ),
           ),
-          // Imatge cervesa "spitting_beer" (inferior centre)
+          // Imatge cervesa "spitting_birra" (inferior centre)
           Positioned(
-            
-            top: screenHeight * 0.43, // Posició inferior una mica fora de la pantalla per a que sembli tallada
+            top: screenHeight *
+                0.43, // Posició inferior una mica fora de la pantalla per a que sembli tallada
             //left: screenWidth * 0.2, // Posició esquerra per centrar-la horitzontalment aproximadament
-            left: spittingBeerImageLefPosition(screenWidth, spittingBeerImageWidth),
+            left: spittingBirraImageLefPosition(
+                screenWidth, spittingBirraImageWidth),
             //right: -screenWidth*0.3, // Posició dreta per centrar-la horitzontalment aproximadament
             child: Transform.rotate(
               angle: degreesToRadians(-10),
               child: Image.asset(
-                'assets/images/spitting_beer.png', // Ruta a la imatge cervesa gran
-                height: spittingBeerImageHeight, // Amplada 120% de la pantalla per a que sobresurti
+                'assets/images/spitting_birra.png', // Ruta a la imatge cervesa gran
+                height:
+                    spittingBirraImageHeight, // Amplada 120% de la pantalla per a que sobresurti
                 opacity: const AlwaysStoppedAnimation(0.3), // Ajusta l'opacitat
               ),
             ),
@@ -79,11 +91,11 @@ class CustomBackground extends StatelessWidget {
     );
   }
 
-  double degreesToRadians(double x){
+  double degreesToRadians(double x) {
     return x * math.pi / 180;
   }
 
-  double spittingBeerImageLefPosition(double screenWidth, double imageWidth){
-    return screenWidth - (imageWidth/1.35);
+  double spittingBirraImageLefPosition(double screenWidth, double imageWidth) {
+    return screenWidth - (imageWidth / 1.35);
   }
 }

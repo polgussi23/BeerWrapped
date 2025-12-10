@@ -1,6 +1,6 @@
 {
-    "name": "beerwrapped",
-    "short_name": "beerwrapped",
+    "name": "birrawrapped",
+    "short_name": "birrawrapped",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

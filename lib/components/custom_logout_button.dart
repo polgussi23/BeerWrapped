@@ -1,5 +1,5 @@
-import 'package:beerwrapped/providers/user_provider.dart';
-import 'package:beerwrapped/services/logout_service.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/services/logout_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import 'package:shared_preferences/shared_preferences.dart';

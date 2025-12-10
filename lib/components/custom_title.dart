@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
-class CustomTitle extends StatefulWidget { // Convert to StatefulWidget
+class CustomTitle extends StatefulWidget {
+  // Convert to StatefulWidget
   final Widget? child;
 
   const CustomTitle({Key? key, this.child}) : super(key: key);
@@ -11,19 +12,23 @@ class CustomTitle extends StatefulWidget { // Convert to StatefulWidget
   _CustomTitleState createState() => _CustomTitleState(); // Create State
 }
 
-class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStateMixin { // Add TickerProvider
+class _CustomTitleState extends State<CustomTitle>
+    with SingleTickerProviderStateMixin {
+  // Add TickerProvider
   late AnimationController _animationController; // AnimationController
   late Animation<double> _animation; // Animation
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController( // Initialize AnimationController
+    _animationController = AnimationController(
+      // Initialize AnimationController
       vsync: this,
       duration: const Duration(milliseconds: 1500), // Animation duration
     )..repeat(reverse: true); // Repeat animation in reverse
 
-    _animation = Tween<double>(begin: 1.0, end: 1.1).animate( // Define animation tween
+    _animation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      // Define animation tween
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut, // Animation curve
@@ -41,7 +46,7 @@ class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final beerFontSize = math.min(screenHeight * 0.11, screenWidth * 0.2);
+    final birraFontSize = math.min(screenHeight * 0.11, screenWidth * 0.2);
     final wrappedFontSize = math.min(screenHeight * 0.08, screenWidth * 0.15);
 
     return Container(
@@ -53,19 +58,21 @@ class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStat
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            AnimatedBuilder( // AnimatedBuilder for animation
+            AnimatedBuilder(
+              // AnimatedBuilder for animation
               animation: _animation,
               builder: (context, child) {
                 return Transform.rotate(
-                  angle: degreesToRadians(-16),
-                  child: Transform.scale( // Transform.scale for size animation
+                  angle: degreesToRadians(-13),
+                  child: Transform.scale(
+                    // Transform.scale for size animation
                     scale: _animation.value, // Use animated scale value
                     child: Text(
-                      'BEER',
+                      'BIRRA',
                       style: TextStyle(
                         fontFamily: 'Kameron',
                         fontWeight: FontWeight.bold,
-                        fontSize: beerFontSize,
+                        fontSize: birraFontSize,
                         color: const Color(0xFFFAF3E0),
                         shadows: const <Shadow>[
                           Shadow(
@@ -96,12 +103,14 @@ class _CustomTitleState extends State<CustomTitle> with SingleTickerProviderStat
                 );
               },
             ),
-            AnimatedBuilder( // AnimatedBuilder for animation
+            AnimatedBuilder(
+              // AnimatedBuilder for animation
               animation: _animation,
               builder: (context, child) {
                 return Transform.rotate(
                   angle: degreesToRadians(5),
-                  child: Transform.scale( // Transform.scale for size animation
+                  child: Transform.scale(
+                    // Transform.scale for size animation
                     scale: _animation.value, // Use animated scale value
                     child: Text(
                       'WRAPPED',

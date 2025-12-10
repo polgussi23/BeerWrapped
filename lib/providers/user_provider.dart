@@ -1,5 +1,5 @@
-import 'package:beerwrapped/models/login_response.dart';
-import 'package:beerwrapped/models/register_response.dart';
+import 'package:birrawrapped/models/login_response.dart';
+import 'package:birrawrapped/models/register_response.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';

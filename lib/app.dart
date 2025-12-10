@@ -1,6 +1,6 @@
-import 'package:beerwrapped/providers/user_provider.dart';
-import 'package:beerwrapped/screens/splash_screen.dart';
-import 'package:beerwrapped/screens/waitToStart_screen.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/screens/splash_screen.dart';
+import 'package:birrawrapped/screens/waitToStart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<UserProvider>().loadSession();
     return MaterialApp(
-      title: 'Beer Wrapped',
+      title: 'Birra Wrapped',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),

@@ -1,4 +1,4 @@
-import 'package:beerwrapped/models/register_response.dart';
+import 'package:birrawrapped/models/register_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';

@@ -1,4 +1,4 @@
-import 'package:beerwrapped/services/api_client.dart';
+import 'package:birrawrapped/services/api_client.dart';
 
 class StartDateService {
   final _client = ApiClient();

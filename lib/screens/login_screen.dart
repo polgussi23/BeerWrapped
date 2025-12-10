@@ -1,6 +1,6 @@
-import 'package:beerwrapped/components/custom_button.dart';
-import 'package:beerwrapped/components/custom_title.dart';
-import 'package:beerwrapped/providers/user_provider.dart';
+import 'package:birrawrapped/components/custom_button.dart';
+import 'package:birrawrapped/components/custom_title.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import 'package:shared_preferences/shared_preferences.dart';

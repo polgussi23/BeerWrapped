@@ -6,14 +6,14 @@
     [
       "C:\\Users\\polgu\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
-      "C:\\Users\\polgu\\Documents\\Flutter\\BeerWrapped\\android\\app\\.cxx\\Debug\\5e305p6d\\arm64-v8a",
+      "C:\\Users\\polgu\\Documents\\Flutter\\BirraWrapped\\android\\app\\.cxx\\Debug\\5e305p6d\\arm64-v8a",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "C:\\Users\\polgu\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
-    "C:\\Users\\polgu\\Documents\\Flutter\\BeerWrapped\\android\\app\\.cxx\\Debug\\5e305p6d\\arm64-v8a",
+    "C:\\Users\\polgu\\Documents\\Flutter\\BirraWrapped\\android\\app\\.cxx\\Debug\\5e305p6d\\arm64-v8a",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {},

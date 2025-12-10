@@ -151,7 +151,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/polgu/Documents/Flutter/BeerWrapped/android/app/.cxx/Debug/5e305p6d/x86"
+			"value" : "c:/Users/polgu/Documents/Flutter/BirraWrapped/android/app/.cxx/Debug/5e305p6d/x86"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -751,7 +751,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "C:\\Users\\polgu\\Documents\\Flutter\\BeerWrapped\\build\\app\\intermediates\\cxx\\Debug\\5e305p6d\\obj\\x86"
+			"value" : "C:\\Users\\polgu\\Documents\\Flutter\\BirraWrapped\\build\\app\\intermediates\\cxx\\Debug\\5e305p6d\\obj\\x86"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1023,7 +1023,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "C:\\Users\\polgu\\Documents\\Flutter\\BeerWrapped\\build\\app\\intermediates\\cxx\\Debug\\5e305p6d\\obj\\x86"
+			"value" : "C:\\Users\\polgu\\Documents\\Flutter\\BirraWrapped\\build\\app\\intermediates\\cxx\\Debug\\5e305p6d\\obj\\x86"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1331,7 +1331,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/polgu/Documents/Flutter/BeerWrapped/android/app/.cxx/Debug/5e305p6d/x86"
+			"value" : "C:/Users/polgu/Documents/Flutter/BirraWrapped/android/app/.cxx/Debug/5e305p6d/x86"
 		},
 		{
 			"name" : "Project_IS_TOP_LEVEL",

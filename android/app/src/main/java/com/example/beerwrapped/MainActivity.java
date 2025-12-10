@@ -1,4 +1,4 @@
-package com.example.beerwrapped;
+package com.example.birrawrapped;
 
 import io.flutter.embedding.android.FlutterActivity;
 
