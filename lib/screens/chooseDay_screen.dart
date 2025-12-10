@@ -36,7 +36,7 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
 
     //3. Envio el meu usuari i la data a la API
     try {
-      await _startDayService.setStartDate(
+      await _startDayService.updateStartDate(
           userId, DateFormat('yyyy-MM-dd').format(_selectedDate));
       print("Data afegida correctament!");
       context.read<UserProvider>().setStartDay(_selectedDate);

@@ -70,6 +70,22 @@ class ApiClient {
     return _processResponse(response);
   }
 
+  // PUT
+  Future<dynamic> put(String endpoint, Map<String, dynamic> body) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+    final response =
+        await http.put(uri, headers: _headers, body: jsonEncode(body));
+    if (response.statusCode == 403) {
+      final refreshed = await _tryRefreshToken();
+      if (refreshed) {
+        print("Token renovat. Reitentant petició...");
+        return post(endpoint, body);
+      }
+    }
+
+    return _processResponse(response);
+  }
+
   Future<bool> _tryRefreshToken() async {
     if (_refreshToken == null) return false;
 

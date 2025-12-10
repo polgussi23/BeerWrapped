@@ -8,12 +8,6 @@ import '../services/api_client.dart';
 
 class UserProvider extends ChangeNotifier {
   final _storage = FlutterSecureStorage();
-  // Vull guardar:
-  //  - userId
-  //  - username
-  //  - startDay
-  //  - accessToken
-  //  - refreshToken (a FlutterSecureStorage)
   int? _userId;
   String? _username;
   DateTime? _startDay;

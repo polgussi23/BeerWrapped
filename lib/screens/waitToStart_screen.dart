@@ -1,4 +1,5 @@
 import 'package:beerwrapped/components/custom_background.dart';
+import 'package:beerwrapped/components/custom_button.dart';
 import 'package:beerwrapped/components/custom_days_left_card.dart';
 import 'package:beerwrapped/components/custom_logout_button.dart';
 import 'package:beerwrapped/components/custom_title.dart';
@@ -46,8 +47,13 @@ class _WaittostartScreenState extends State<WaittostartScreen> {
                       // El DateSelectionInfoRow (el que sobresale)
                     ],
                   ),
-
-                  SizedBox(height: screenHeight * 0.15),
+                  SizedBox(height: screenHeight * 0.05),
+                  CustomButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/chooseDay');
+                      },
+                      child: Text("CANVIAR DATA")),
+                  SizedBox(height: screenHeight * 0.08),
                   LogoutButton(
                     onPressed: () {
                       print('Tanca la sessió');
