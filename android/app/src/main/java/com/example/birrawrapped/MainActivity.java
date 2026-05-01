@@ -1,4 +1,4 @@
-package com.example.birrawrapped;
+package cat.polgussi.birrawrapped;
 
 import io.flutter.embedding.android.FlutterActivity;
 

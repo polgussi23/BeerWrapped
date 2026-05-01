@@ -50,7 +50,7 @@ class DateSelectionInfoRow extends StatelessWidget {
                           fontSize: screenHeight * 0.025,
                         ),
                         content: const Text(
-                            'Encara no podràs començar a afegir cerveses fins que arribi la data que hagis escollit.\n\n'
+                            'Encara no podràs començar a afegir birres fins que arribi la data que hagis escollit.\n\n'
                             'Un cop hagi passat un any des d\'aquesta data, podràs veure el teu Birra Wrapped.'),
                         actions: [
                           TextButton(
