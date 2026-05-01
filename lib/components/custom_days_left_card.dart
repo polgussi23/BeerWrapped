@@ -55,10 +55,10 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
                     fontFamily: "Kameron",
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
-                  "${_startingDay}",
-                  style: TextStyle(
+                  _startingDay,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                     fontFamily: "Kameron",
@@ -69,37 +69,67 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
             SizedBox(
               height: screenHeight * 0.03,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Falten",
-                  style: TextStyle(
-                    fontSize: 30,
-                    height: 0,
-                    fontFamily: "Kameron",
-                  ),
-                ),
-                Text(
-                  "$_daysLeft",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 48,
-                    height: 0,
-                    fontFamily: "Kameron",
-                  ),
-                ),
-                Text(
-                  "dies",
-                  style: TextStyle(
-                    fontSize: 30,
-                    height: 0,
-                    fontFamily: "Kameron",
-                  ),
-                )
-              ],
-            )
+            if (_daysLeft > 0) mesZeroDies() else zeroDies()
           ],
         ));
+  }
+
+  Column mesZeroDies() {
+    final esUn = _daysLeft == 1;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          esUn ? "Falta" : "Falten",
+          style: const TextStyle(
+            fontSize: 30,
+            height: 0,
+            fontFamily: "Kameron",
+          ),
+        ),
+        Text(
+          "$_daysLeft",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 48,
+            height: 0,
+            fontFamily: "Kameron",
+          ),
+        ),
+        Text(
+          esUn ? "dia" : "dies",
+          style: const TextStyle(
+            fontSize: 30,
+            height: 0,
+            fontFamily: "Kameron",
+          ),
+        )
+      ],
+    );
+  }
+
+  Column zeroDies() {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Comença",
+          style: TextStyle(
+            fontSize: 30,
+            height: 0,
+            fontFamily: "Kameron",
+          ),
+        ),
+        Text(
+          "DEMÀ!!!",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 48,
+            height: 0,
+            fontFamily: "Kameron",
+          ),
+        )
+      ],
+    );
   }
 }

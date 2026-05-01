@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:birrawrapped/components/custom_button.dart';
 import 'package:birrawrapped/components/custom_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
@@ -45,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       DateTime? startDay = up.getStartDay();
 
-      if (startDay != null && startDay.difference(DateTime.now()).inDays > 0) {
+      if (startDay != null && startDay.difference(DateTime.now()).inDays >= 0) {
         Navigator.pushReplacementNamed(context, '/waittostart');
       } else {
         Navigator.pushReplacementNamed(context, '/chooseDay');
