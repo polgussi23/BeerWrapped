@@ -2,7 +2,6 @@ import 'package:birrawrapped/components/action_card.dart';
 import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/custom_small_title.dart';
 import 'package:birrawrapped/components/custom_logout_button.dart';
-import 'package:birrawrapped/components/custom_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +33,7 @@ class _ChooseActionScreenState extends State<ChooseActionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    //final screenHeight = MediaQuery.of(context).size.height;
     getDaysLeft();
 
     return Scaffold(

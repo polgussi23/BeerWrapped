@@ -1,6 +1,4 @@
 import 'package:birrawrapped/services/api_client.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 import '../models/beers_response.dart';
 
 class BeersService {

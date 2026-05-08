@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:birrawrapped/components/custom_button.dart';
 import 'package:birrawrapped/components/custom_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
