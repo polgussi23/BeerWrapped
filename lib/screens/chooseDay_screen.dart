@@ -40,7 +40,17 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
           userId, DateFormat('yyyy-MM-dd').format(_selectedDate));
       print("Data afegida correctament!");
       context.read<UserProvider>().setStartDay(_selectedDate);
-      Navigator.of(context).pushReplacementNamed('/waittostart');
+
+      DateTime? startDay = context.read<UserProvider>().getStartDay();
+
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+
+      if (startDay!.difference(today).inDays > 0) {
+        Navigator.of(context).pushReplacementNamed('/waittostart');
+      } else {
+        Navigator.of(context).pushReplacementNamed('/chooseAction');
+      }
     } catch (error) {
       setState(() {
         _errorMessage = error.toString().replaceAll('Exception: ', '');

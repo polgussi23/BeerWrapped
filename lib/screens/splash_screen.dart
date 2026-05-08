@@ -31,12 +31,20 @@ class _SplashScreenState extends State<SplashScreen> {
           "Connectat automàticament: userId: ${up.getUserId()}, username: ${up.getUsername()}, refreshToken: ${up.getRefreshToken()}");
 
       DateTime? startDay = up.getStartDay();
-      print(startDay);
 
-      if (startDay != null && startDay.difference(DateTime.now()).inDays > 0)
-        Navigator.pushReplacementNamed(context, '/waittostart');
-      else
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      print("Today: ${today}. Start Day: ${startDay}");
+      print("Difference: ${startDay?.difference(today).inDays}");
+      if (startDay != null) {
+        if (startDay.difference(today).inDays > 0) {
+          Navigator.pushReplacementNamed(context, '/waittostart');
+        } else {
+          Navigator.pushReplacementNamed(context, '/chooseAction');
+        }
+      } else {
         Navigator.pushReplacementNamed(context, '/chooseDay');
+      }
     }
   }
 

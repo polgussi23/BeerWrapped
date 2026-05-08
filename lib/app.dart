@@ -1,4 +1,6 @@
 import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/screens/chooseAction_screen.dart';
+import 'package:birrawrapped/screens/chooseDrink_screen.dart';
 import 'package:birrawrapped/screens/splash_screen.dart';
 import 'package:birrawrapped/screens/waitToStart_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/chooseDay': (context) => const ChooseDayScreen(),
         '/waittostart': (context) => const WaittostartScreen(),
+        '/chooseAction': (context) => const ChooseActionScreen(),
+        '/chooseDrink': (context) => const ChooseDrinkScreen(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

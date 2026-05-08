@@ -47,8 +47,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
       DateTime? startDay = up.getStartDay();
 
-      if (startDay != null && startDay.difference(DateTime.now()).inDays >= 0) {
-        Navigator.pushReplacementNamed(context, '/waittostart');
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+
+      print("Difference: ${startDay?.difference(today).inDays}");
+      if (startDay != null) {
+        if (startDay.difference(today).inDays > 0) {
+          Navigator.pushReplacementNamed(context, '/waittostart');
+        } else {
+          Navigator.pushReplacementNamed(context, '/chooseAction');
+        }
       } else {
         Navigator.pushReplacementNamed(context, '/chooseDay');
       }

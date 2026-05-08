@@ -44,7 +44,7 @@ class ApiClient {
     final uri = Uri.parse('$_baseUrl$endpoint');
     final response = await http.get(uri, headers: _headers);
     //return _processResponse(response);
-    if (response.statusCode == 401) {
+    if (response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
       if (refreshed) {
         print("Token renovat. Reitentant petició...");

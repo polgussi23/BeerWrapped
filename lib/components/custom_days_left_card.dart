@@ -17,7 +17,8 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
 
   void _getStartingDay() {
     DateTime? date = context.read<UserProvider>().getStartDay();
-    DateTime today = DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     if (date != null) {
       _startingDay = DateFormat('dd/MM/yyyy').format(date);
       _daysLeft = date.difference(today).inDays;
@@ -69,19 +70,18 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
             SizedBox(
               height: screenHeight * 0.03,
             ),
-            if (_daysLeft > 0) mesZeroDies() else zeroDies()
+            if (_daysLeft > 1) mesUnDia() else unDia()
           ],
         ));
   }
 
-  Column mesZeroDies() {
-    final esUn = _daysLeft == 1;
+  Column mesUnDia() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          esUn ? "Falta" : "Falten",
-          style: const TextStyle(
+        const Text(
+          "Falten",
+          style: TextStyle(
             fontSize: 30,
             height: 0,
             fontFamily: "Kameron",
@@ -96,9 +96,9 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
             fontFamily: "Kameron",
           ),
         ),
-        Text(
-          esUn ? "dia" : "dies",
-          style: const TextStyle(
+        const Text(
+          "dies",
+          style: TextStyle(
             fontSize: 30,
             height: 0,
             fontFamily: "Kameron",
@@ -108,7 +108,7 @@ class _CustomDaysLeftCardState extends State<CustomDaysLeftCard> {
     );
   }
 
-  Column zeroDies() {
+  Column unDia() {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
