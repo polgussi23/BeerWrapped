@@ -5,12 +5,16 @@ class CustomDateChooser extends StatefulWidget {
   final ValueChanged<DateTime> onDateSelected;
   final DateTime initialDate;
   final String hintText;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
 
   const CustomDateChooser({
     Key? key,
     required this.onDateSelected,
     required this.initialDate,
     this.hintText = 'Tria una data',
+    this.firstDate,
+    this.lastDate,
   }) : super(key: key);
 
   @override
@@ -40,8 +44,8 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _currentSelectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
+      firstDate: widget.firstDate ?? DateTime.now(),
+      lastDate: widget.lastDate ?? DateTime(2101),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(

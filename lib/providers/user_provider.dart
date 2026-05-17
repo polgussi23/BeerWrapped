@@ -11,6 +11,7 @@ class UserProvider extends ChangeNotifier {
   int? _userId;
   String? _username;
   DateTime? _startDay;
+  DateTime? _birthDate;
 
   String? _accessToken;
   String? _refreshToken;
@@ -39,6 +40,10 @@ class UserProvider extends ChangeNotifier {
     return _startDay;
   }
 
+  DateTime? getBirthDate() {
+    return _birthDate;
+  }
+
   Future<void> loadSession() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -53,6 +58,17 @@ class UserProvider extends ChangeNotifier {
     } catch (e) {
       print("Error llegint la data: $e");
       _startDay = null; // En cas d'error, el deixem buit per no bloquejar l'app
+    }
+
+    try {
+      final dateStr = prefs.getString('birthDate');
+      if (dateStr != null && dateStr.isNotEmpty) {
+        _birthDate = DateFormat('yyyy-MM-dd', 'ca').parse(dateStr);
+      }
+    } catch (e) {
+      print("Error llegint la data de neixament: $e");
+      _birthDate =
+          null; // En cas d'error, el deixem buit per no bloquejar l'app
     }
 
     //_accessToken = prefs.getString('accessToken');
@@ -82,12 +98,25 @@ class UserProvider extends ChangeNotifier {
       print("Error llegint la data: $e");
       _startDay = null; // En cas d'error, el deixem buit per no bloquejar l'app
     }
+
+    try {
+      final dateStr = r.birthDate;
+      if (dateStr != null && dateStr.isNotEmpty) {
+        _birthDate = DateFormat('yyyy-MM-dd', 'ca').parse(dateStr);
+      }
+    } catch (e) {
+      print("Error llegint la data de neixament: $e");
+      _birthDate =
+          null; // En cas d'error, el deixem buit per no bloquejar l'app
+    }
+
     _accessToken = r.accessToken;
     _refreshToken = r.refreshToken;
 
     prefs.setInt('userId', r.userId);
     prefs.setString('username', r.username);
     prefs.setString('startDay', r.startDay ?? '');
+    prefs.setString('birthDate', r.birthDate ?? '');
 
     await _storage.write(key: 'accessToken', value: r.accessToken);
     await _storage.write(key: 'refreshToken', value: r.refreshToken);
@@ -113,6 +142,8 @@ class UserProvider extends ChangeNotifier {
     _userId = r.userId;
     _username = r.username;
 
+    _birthDate = r.birthDate as DateTime?;
+
     _accessToken = r.accessToken;
     _refreshToken = r.refreshToken;
 
@@ -131,18 +162,20 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> setSession(int id, String username, DateTime startDay,
-      String access, String refresh) async {
+      DateTime birthDate, String access, String refresh) async {
     final prefs = await SharedPreferences.getInstance();
 
     _userId = id;
     _username = username;
     _startDay = startDay;
+    _birthDate = birthDate;
     _accessToken = access;
     _refreshToken = refresh;
 
     prefs.setInt('userId', id);
     prefs.setString('username', username);
     prefs.setString('startDay', startDay.toString());
+    prefs.setString('birthDate', birthDate.toString());
 
     await _storage.write(key: 'accessToken', value: access);
     await _storage.write(key: 'refreshToken', value: refresh);
@@ -171,6 +204,7 @@ class UserProvider extends ChangeNotifier {
     _userId = null;
     _username = null;
     _startDay = null;
+    _birthDate = null;
     _accessToken = null;
     _refreshToken = null;
 

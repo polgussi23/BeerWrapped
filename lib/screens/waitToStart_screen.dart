@@ -3,7 +3,11 @@ import 'package:birrawrapped/components/custom_button.dart';
 import 'package:birrawrapped/components/custom_days_left_card.dart';
 import 'package:birrawrapped/components/custom_logout_button.dart';
 import 'package:birrawrapped/components/custom_title.dart';
+import 'package:birrawrapped/components/wrapped_banner.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/services/wrapped_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WaittostartScreen extends StatefulWidget {
   const WaittostartScreen({Key? key}) : super(key: key);
@@ -13,6 +17,25 @@ class WaittostartScreen extends StatefulWidget {
 }
 
 class _WaittostartScreenState extends State<WaittostartScreen> {
+  final _wrappedService = WrappedService();
+  bool _showWrappedBanner = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkWrapped();
+  }
+
+  Future<void> _checkWrapped() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final userId = context.read<UserProvider>().getUserId();
+      final showBanner =
+          await _wrappedService.checkAndShowWrapped(context, userId);
+      if (mounted) setState(() => _showWrappedBanner = showBanner);
+    });
+    print(_showWrappedBanner);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -36,6 +59,7 @@ class _WaittostartScreenState extends State<WaittostartScreen> {
                           screenHeight * 0.10), // Espacio después del título
 
                   // Usamos un Stack para superponer los elementos
+                  if (_showWrappedBanner) WrappedBanner(),
                   Stack(
                     clipBehavior: Clip
                         .none, // Permite que los hijos se desborden de los límites del Stack

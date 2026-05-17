@@ -5,12 +5,12 @@ import 'dart:convert';
 
 class RegisterService {
   Future<RegisterResponse> registerUser(
-      String username, String email, String password) async {
+      String username, String email, String password, String birthdate) async {
     final String apiUrlBase =
         dotenv.env['API_URL'] ?? 'http://217.160.2.122:3100';
 
     final Uri apiUrlRegister = Uri.parse('$apiUrlBase/api/auth/register');
-
+    print("Enviat $birthdate");
     try {
       final response = await http.post(
         apiUrlRegister,
@@ -20,7 +20,8 @@ class RegisterService {
         body: jsonEncode(<String, String>{
           'username': username,
           'password': password,
-          'email': email
+          'email': email,
+          'birthdate': birthdate,
         }),
       );
 

@@ -1,7 +1,9 @@
 import 'package:birrawrapped/components/custom_button.dart';
 import 'package:birrawrapped/components/custom_title.dart';
+import 'package:birrawrapped/components/wrapped_banner.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/startDay_service.dart';
+import 'package:birrawrapped/services/wrapped_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../components/custom_background.dart';
@@ -23,6 +25,24 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
 
   String _errorMessage = '';
   bool _isLoading = false;
+
+  final _wrappedService = WrappedService();
+  bool _showWrappedBanner = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkWrapped();
+  }
+
+  Future<void> _checkWrapped() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final userId = context.read<UserProvider>().getUserId();
+      final showBanner =
+          await _wrappedService.checkAndShowWrapped(context, userId);
+      if (mounted) setState(() => _showWrappedBanner = showBanner);
+    });
+  }
 
   Future<void> _handleChooseDay() async {
     setState(() {
@@ -49,7 +69,7 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
       if (startDay!.difference(today).inDays > 0) {
         Navigator.of(context).pushReplacementNamed('/waittostart');
       } else {
-        Navigator.of(context).pushReplacementNamed('/chooseAction');
+        Navigator.of(context).pushReplacementNamed('/home');
       }
     } catch (error) {
       setState(() {
@@ -85,7 +105,7 @@ class _ChooseDayScreenState extends State<ChooseDayScreen> {
                   SizedBox(
                       height:
                           screenHeight * 0.10), // Espacio después del título
-
+                  if (_showWrappedBanner) WrappedBanner(),
                   // Usamos un Stack para superponer los elementos
                   Stack(
                     clipBehavior: Clip

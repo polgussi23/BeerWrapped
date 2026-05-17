@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permisos per a la galeria i càmera -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Per a Android 12 i inferiors -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+    <!-- Per a internet (API calls i imatges) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
     <application
         android:label="birrawrapped"
         android:name="${applicationName}"

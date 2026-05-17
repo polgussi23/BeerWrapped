@@ -18,6 +18,9 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   shared_preferences: ^2.5.3
   cached_network_image: ^3.4.1
+  image_picker: ^1.0.7
+  fl_chart: ^0.68.0
+  share_plus: ^7.2.2
 
 dev_dependencies:
   flutter_test:

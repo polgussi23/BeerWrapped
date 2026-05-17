@@ -2,6 +2,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // Si fas servir dotenv
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
 
 class ApiClient {
   // Singleton: Perquè sigui la mateixa instància a tot arreu
@@ -40,17 +42,23 @@ class ApiClient {
   // --- Mètodes Genèrics (GET, POST, PUT, DELETE) ---
 
   // GET
-  Future<dynamic> get(String endpoint) async {
-    final uri = Uri.parse('$_baseUrl$endpoint');
+  Future<dynamic> get(String endpoint,
+      {Map<String, String>? queryParams}) async {
+    // Construeix la URI amb els query params si n'hi ha
+    final uri = Uri.parse('$_baseUrl$endpoint').replace(
+      queryParameters: queryParams,
+    );
+
     final response = await http.get(uri, headers: _headers);
-    //return _processResponse(response);
+
     if (response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
       if (refreshed) {
         print("Token renovat. Reitentant petició...");
-        return get(endpoint);
+        return get(endpoint, queryParams: queryParams);
       }
     }
+
     return _processResponse(response);
   }
 
@@ -81,6 +89,53 @@ class ApiClient {
         print("Token renovat. Reitentant petició...");
         return post(endpoint, body);
       }
+    }
+
+    return _processResponse(response);
+  }
+
+  Future<dynamic> putFile(String endpoint, File file, String fieldName) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+
+    // Detectem el mimetype manualment segons l'extensió
+    final ext = file.path.split('.').last.toLowerCase();
+    final mimeType = switch (ext) {
+      'png' => 'image/png',
+      'webp' => 'image/webp',
+      _ => 'image/jpeg',
+    };
+
+    final request = http.MultipartRequest('PUT', uri);
+
+    request.headers['Authorization'] = 'Bearer $_accessToken';
+
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        fieldName,
+        file.path,
+        contentType:
+            MediaType.parse(mimeType), // <-- especifiquem el contentType
+      ),
+    );
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tryRefreshToken();
+      if (refreshed) return putFile(endpoint, file, fieldName);
+    }
+
+    return _processResponse(response);
+  }
+
+  Future<dynamic> delete(String endpoint) async {
+    final uri = Uri.parse('$_baseUrl$endpoint');
+    final response = await http.delete(uri, headers: _headers);
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tryRefreshToken();
+      if (refreshed) return delete(endpoint);
     }
 
     return _processResponse(response);

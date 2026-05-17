@@ -5,6 +5,7 @@ class LoginResponse {
   final String username;
   final String message;
   final String? startDay;
+  final String? birthDate;
 
   LoginResponse(
       {required this.accessToken,
@@ -12,7 +13,8 @@ class LoginResponse {
       required this.userId,
       required this.username,
       required this.message,
-      this.startDay});
+      this.startDay,
+      this.birthDate});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json, String u) {
     return LoginResponse(
@@ -21,6 +23,7 @@ class LoginResponse {
       message: json['message'],
       userId: json['userId'],
       startDay: json['startDay'] ?? '',
+      birthDate: json['birthDate'] ?? '',
       username: u,
     );
   }
