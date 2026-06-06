@@ -1,6 +1,7 @@
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/screens/chooseAction_screen.dart';
 import 'package:birrawrapped/screens/chooseDrink_screen.dart';
+import 'package:birrawrapped/screens/forgot_password_screen.dart';
 import 'package:birrawrapped/screens/groups/create_group_screen.dart';
 import 'package:birrawrapped/screens/groups/create_meetup_screen.dart';
 import 'package:birrawrapped/screens/groups/group_detail_screen.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         '/editUsername': (context) => const EditUsernameScreen(),
         '/editEmail': (context) => const EditEmailScreen(),
         '/editPassword': (context) => const EditPasswordScreen(),
+        '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/wrapped': (context) => const WrappedScreen(),
       },
       localizationsDelegates: const [

@@ -5,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final Icon icon;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     Key? key,
@@ -12,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     required this.icon,
     this.obscureText = false,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -31,15 +33,20 @@ class CustomTextField extends StatelessWidget {
           ],
         ),
         child: SizedBox(
-          height: screenHeight*0.025 * 2,
+          height: screenHeight * 0.025 * 2,
           child: TextField(
             controller: controller,
             obscureText: obscureText,
-            style: TextStyle(color: Color(0xC2FAF3E0), fontFamily: 'Kameron', fontSize: screenHeight*0.025),
+            keyboardType: keyboardType,
+            style: TextStyle(
+                color: Color(0xC2FAF3E0),
+                fontFamily: 'Kameron',
+                fontSize: screenHeight * 0.025),
             cursorColor: const Color(0XFFFAF3E0),
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: const TextStyle(color: Color(0x7AFAF3E0), fontFamily: 'Kameron'),
+              hintStyle: const TextStyle(
+                  color: Color(0x7AFAF3E0), fontFamily: 'Kameron'),
               contentPadding: const EdgeInsets.symmetric(vertical: -2),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),

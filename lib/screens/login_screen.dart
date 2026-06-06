@@ -132,6 +132,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(color: Colors.red),
                       ),
                     ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/forgotPassword');
+                    },
+                    child: Text(
+                      'Has oblidat la contrasenya?',
+                      style: TextStyle(
+                        color: const Color.fromARGB(195, 250, 243, 224),
+                        fontFamily: 'Kameron',
+                        fontSize: screenHeight * 0.020,
+                        decoration: TextDecoration.underline,
+                        decorationColor: const Color(0xFFFAF3E0),
+                        decorationThickness: 2.0,
+                      ),
+                    ),
+                  ),
+
                   SizedBox(height: screenHeight * 0.15),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
