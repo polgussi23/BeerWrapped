@@ -43,30 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
           'Login exitós! Token: ${response.accessToken}, User ID: ${response.userId}, StartDay: ${response.startDay}, Message: ${response.message}');
       await up.setSessionFromLoginResponse(response);
 
-      DateTime? startDay = up.getStartDay();
-
-      DateTime now = DateTime.now();
-      DateTime today = DateTime(now.year, now.month, now.day);
-
-      print("Difference: ${startDay?.difference(today).inDays}");
-      /*
-      if (startDay != null) {
-        if (startDay.difference(today).inDays > 0) {
-          Navigator.pushReplacementNamed(context, '/waittostart');
-        } else {
-          Navigator.pushReplacementNamed(context, '/home');
-        }
-      } else {
-        Navigator.pushReplacementNamed(context, '/chooseDay');
-      }
-      */
-      Navigator.pushReplacementNamed(context, '/');
-    } catch (error) {
+      // Si no té el correu validat: '/validateEmail'
+      // else: '/'
+      if (!up.isEmailVerified()!)
+        Navigator.pushReplacementNamed(context, '/validateEmail');
+      else
+        Navigator.pushReplacementNamed(context, '/');
+    } catch (error, stackTrace) {
       setState(() {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
       });
 
       print('Error en el login: $error');
+      print("Stacktrace: $stackTrace");
     } finally {
       setState(() {
         _isLoading = false;

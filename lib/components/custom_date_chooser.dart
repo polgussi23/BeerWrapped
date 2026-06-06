@@ -24,13 +24,15 @@ class CustomDateChooser extends StatefulWidget {
 class _CustomDateChooserState extends State<CustomDateChooser> {
   late TextEditingController _dateController;
   late DateTime _currentSelectedDate;
+  bool _hasSelectedDate = false;
 
   @override
   void initState() {
     super.initState();
     _currentSelectedDate = widget.initialDate;
     _dateController = TextEditingController(
-      text: DateFormat('dd/MM/yyyy', 'ca').format(_currentSelectedDate),
+      //text: DateFormat('dd/MM/yyyy', 'ca').format(_currentSelectedDate),
+      text: '',
     );
   }
 
@@ -63,6 +65,7 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
     );
     if (picked != null && picked != _currentSelectedDate) {
       setState(() {
+        _hasSelectedDate = true;
         _currentSelectedDate = picked;
         _dateController.text =
             DateFormat('dd/MM/yyyy', 'ca').format(_currentSelectedDate);
@@ -105,8 +108,7 @@ class _CustomDateChooserState extends State<CustomDateChooser> {
                 fontFamily: 'Kameron',
                 fontSize: screenHeight * 0.025),
             cursorColor: const Color(0XFFFAF3E0),
-            textAlign: TextAlign
-                .center, // <--- Esta es la línea clave para centrar el texto
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: widget.hintText,
               hintStyle: const TextStyle(

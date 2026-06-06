@@ -10,6 +10,8 @@ class UserProvider extends ChangeNotifier {
   final _storage = FlutterSecureStorage();
   int? _userId;
   String? _username;
+  String? _email;
+  String? _emailVerified;
   DateTime? _startDay;
   DateTime? _birthDate;
 
@@ -36,6 +38,19 @@ class UserProvider extends ChangeNotifier {
     return _username;
   }
 
+  String? getEmail() {
+    return _email;
+  }
+
+  bool? isEmailVerified() {
+    print("_emailVerified=$_emailVerified");
+
+    if (_emailVerified == "YES")
+      return true;
+    else
+      return false;
+  }
+
   DateTime? getStartDay() {
     return _startDay;
   }
@@ -44,11 +59,26 @@ class UserProvider extends ChangeNotifier {
     return _birthDate;
   }
 
+  Future<void> setEmailVerified() async {
+    final prefs = await SharedPreferences.getInstance();
+    _emailVerified = 'YES';
+    prefs.setString('emailVerified', 'YES');
+  }
+
+  Future<void> setEmail(String email) async {
+    _email = email;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', email);
+    notifyListeners();
+  }
+
   Future<void> loadSession() async {
     final prefs = await SharedPreferences.getInstance();
 
     _userId = prefs.getInt('userId');
     _username = prefs.getString('username');
+    _email = prefs.getString('email');
+    _emailVerified = prefs.getString('emailVerified');
 
     try {
       final dateStr = prefs.getString('startDay');
@@ -89,6 +119,8 @@ class UserProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _userId = r.userId;
     _username = r.username;
+    _email = r.email;
+    _emailVerified = r.emailVerified;
     try {
       final dateStr = r.startDay;
       if (dateStr != null && dateStr.isNotEmpty) {
@@ -115,6 +147,8 @@ class UserProvider extends ChangeNotifier {
 
     prefs.setInt('userId', r.userId);
     prefs.setString('username', r.username);
+    prefs.setString('email', r.email);
+    prefs.setString('emailVerified', r.emailVerified);
     prefs.setString('startDay', r.startDay ?? '');
     prefs.setString('birthDate', r.birthDate ?? '');
 
@@ -141,14 +175,18 @@ class UserProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _userId = r.userId;
     _username = r.username;
+    _email = r.email;
+    _emailVerified = "NO";
 
-    _birthDate = r.birthDate as DateTime?;
+    _birthDate = DateFormat("yyyy-MM-dd").parse(r.birthDate);
 
     _accessToken = r.accessToken;
     _refreshToken = r.refreshToken;
 
     prefs.setInt('userId', r.userId);
     prefs.setString('username', r.username);
+    prefs.setString('email', r.email);
+    prefs.setString('emailVerified', 'NO');
 
     await _storage.write(key: 'accessToken', value: r.accessToken);
     await _storage.write(key: 'refreshToken', value: r.refreshToken);
@@ -161,12 +199,21 @@ class UserProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> setSession(int id, String username, DateTime startDay,
-      DateTime birthDate, String access, String refresh) async {
+  Future<void> setSession(
+      int id,
+      String username,
+      String email,
+      String emailVerified,
+      DateTime startDay,
+      DateTime birthDate,
+      String access,
+      String refresh) async {
     final prefs = await SharedPreferences.getInstance();
 
     _userId = id;
     _username = username;
+    _email = email;
+    _emailVerified = emailVerified;
     _startDay = startDay;
     _birthDate = birthDate;
     _accessToken = access;
@@ -174,6 +221,8 @@ class UserProvider extends ChangeNotifier {
 
     prefs.setInt('userId', id);
     prefs.setString('username', username);
+    prefs.setString('email', email);
+    prefs.setString('emailVerified', emailVerified);
     prefs.setString('startDay', startDay.toString());
     prefs.setString('birthDate', birthDate.toString());
 
@@ -203,6 +252,8 @@ class UserProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _userId = null;
     _username = null;
+    _email = null;
+    _emailVerified = null;
     _startDay = null;
     _birthDate = null;
     _accessToken = null;

@@ -10,6 +10,7 @@ import 'package:birrawrapped/screens/profile/edit_email_screen.dart';
 import 'package:birrawrapped/screens/profile/edit_password_screen.dart';
 import 'package:birrawrapped/screens/profile/edit_username_screen.dart';
 import 'package:birrawrapped/screens/splash_screen.dart';
+import 'package:birrawrapped/screens/verify_email_screen.dart';
 import 'package:birrawrapped/screens/waitToStart_screen.dart';
 import 'package:birrawrapped/screens/wrapped/wrapped_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/validateEmail': (context) => const VerifyEmailScreen(),
         '/chooseDay': (context) => const ChooseDayScreen(),
         '/waittostart': (context) => const WaittostartScreen(),
         '/chooseAction': (context) => const ChooseActionScreen(),

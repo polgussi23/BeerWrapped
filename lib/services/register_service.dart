@@ -26,12 +26,13 @@ class RegisterService {
       );
 
       if (response.statusCode == 201) {
+        print(jsonDecode(response.body));
         return RegisterResponse.fromJson(jsonDecode(response.body), username);
       } else {
         throw Exception('Error en el registre: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 }

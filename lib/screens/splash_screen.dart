@@ -27,6 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacementNamed(context, '/login');
       return;
     }
+    if (!up.isEmailVerified()!) {
+      Navigator.pushReplacementNamed(context, '/validateEmail');
+      return;
+    }
 
     final DateTime? startDay = up.getStartDay();
     final DateTime now = DateTime.now();

@@ -230,8 +230,8 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     if (confirm == true) {
       try {
         await GroupsService().removeMember(
-          group['id'].toString(),
-          member['id'].toString(),
+          group['id'],
+          member['id'],
         );
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(

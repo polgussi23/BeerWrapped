@@ -50,6 +50,8 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
       await UserService()
           .updateEmail(userId.toString(), _controller.text.trim());
 
+      await context.read<UserProvider>().setEmail(_controller.text.trim());
+
       if (!mounted) return;
       Navigator.pop(context);
     } catch (e) {

@@ -33,6 +33,33 @@ class _GroupsScreenState extends State<GroupsScreen> {
     return GroupsService().getAllUserGroups(userId.toString());
   }
 
+  void _leaveGroup(int group) {
+    final userId = context.read<UserProvider>().getUserId();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Sortir del grup'),
+        content: Text('Segur que vols sortir de "${group}"?'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel·lar')),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await GroupsService().removeMember(group, userId!);
+              setState(() {
+                _loadGroups();
+              });
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text('Sortir'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = context.read<UserProvider>().getUserId();
@@ -123,15 +150,35 @@ class _GroupsScreenState extends State<GroupsScreen> {
                             final group = groups[index];
                             final isOwner = group['ownerId'] == userId;
 
-                            return GroupCard(
-                              group: group,
-                              isOwner: isOwner,
-                              onTap: () => Navigator.pushNamed(
-                                context,
-                                '/groupDetail',
-                                arguments: group,
-                              ),
-                            );
+                            return GestureDetector(
+                                onLongPress: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          leading: Icon(Icons.exit_to_app,
+                                              color: Colors.red),
+                                          title: Text('Sortir del grup'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            _leaveGroup(group['id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: GroupCard(
+                                  group: group,
+                                  isOwner: isOwner,
+                                  onTap: () => Navigator.pushNamed(
+                                    context,
+                                    '/groupDetail',
+                                    arguments: group,
+                                  ),
+                                ));
                           },
                         );
                       },

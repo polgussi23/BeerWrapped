@@ -32,7 +32,7 @@ class LoginService {
         throw Exception('Error en el login: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 }

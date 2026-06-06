@@ -118,7 +118,7 @@ class GroupsService {
         .post('/api/groups/$groupId/meetups/$userId/$meetupId/attend', {});
   }
 
-  Future<void> removeMember(String groupId, String userId) async {
+  Future<void> removeMember(int groupId, int userId) async {
     await _client.delete('/api/groups/$groupId/members/$userId');
   }
 

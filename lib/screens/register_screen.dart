@@ -49,12 +49,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'Registre exitós! Token: ${response.refreshToken}, User ID: ${response.userId}');
 
       context.read<UserProvider>().setSessionFromRegisterResponse(response);
-      Navigator.of(context).pushReplacementNamed('/chooseDay');
-    } catch (error) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/validateEmail', (route) => false);
+    } catch (error, stackTrace) {
+      print('Error en el registre: $error');
+      print('STACKTRACE: $stackTrace');
       setState(() {
         _errorMessage = error.toString().replaceAll('Exception: ', '');
       });
-      print('Error en el registre: $error');
     } finally {
       setState(() {
         _isLoading = false;
@@ -127,9 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.04),
                       CustomDateChooser(
-                        // <-- substitueix el GestureDetector+AbsorbPointer+CustomTextField
                         initialDate: DateTime(2000),
-                        hintText: 'Data de naixement',
+                        hintText: 'Data naixement',
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now(),
                         onDateSelected: (date) {
