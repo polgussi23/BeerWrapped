@@ -1,3 +1,4 @@
+// screens/chooseDrink_screen.dart
 import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/custom_small_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
@@ -5,6 +6,7 @@ import 'package:birrawrapped/components/drink_card.dart';
 import 'package:birrawrapped/models/beers_response.dart';
 import 'package:birrawrapped/services/beers_service.dart';
 import 'package:birrawrapped/services/preferences_service.dart';
+import 'package:birrawrapped/services/sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +38,7 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
 
   Future<BeersResponse> getAllBeers() async {
     final results = await Future.wait([
-      BeersService().getAllBeers(),
+      BeersService().getAllBeers(), // ara té cache offline integrat
       PreferencesService.getBeerHistory(),
     ]);
 
@@ -46,19 +48,35 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
 
   void _onDrinkSelected(Beer beer) async {
     await PreferencesService.saveBeerToHistory(beer.id);
-    print('Beguda seleccionada: ${beer.name}. Enllaç imatge: ${beer.imageUrl}');
 
-    var userId = context.read<UserProvider>().getUserId().toString();
-    var beerId = beer.id.toString();
-    var now = DateTime.now();
-    var date = "${now.year}-${now.month}-${now.day}";
-    var time = "${now.hour}:${now.minute}:${now.second}";
-    var numOfWeek = now.weekday;
-    var dayOfWeek = daysOfWeek[numOfWeek - 1];
+    final userId = context.read<UserProvider>().getUserId().toString();
+    final beerId = beer.id.toString();
+    final now = DateTime.now();
+    final date = "${now.year}-${now.month}-${now.day}";
+    final time = "${now.hour}:${now.minute}:${now.second}";
+    final dayOfWeek = daysOfWeek[now.weekday - 1];
 
-    BeersService().postBeerToUser(userId, beerId, date, time, dayOfWeek);
+    await BeersService().saveBeerLocally(userId, beerId, date, time, dayOfWeek);
+
+    // Capturem el messenger ABANS del pop, mentre el context encara és vàlid
+    final messenger = ScaffoldMessenger.of(context);
 
     Navigator.pop(context);
+
+    Future.any([
+      SyncService().syncPending(),
+      Future.delayed(const Duration(seconds: 1), () => false),
+    ]).then((synced) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(synced
+              ? '🍺 Birra registrada!'
+              : '📶 Sense connexió, es pujarà quan tornis a tenir-ne.'),
+          duration: Duration(seconds: synced ? 2 : 4),
+          backgroundColor: synced ? Colors.green[700] : Colors.orange[700],
+        ),
+      );
+    });
   }
 
   @override
@@ -79,7 +97,6 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
                     child: FutureBuilder<BeersResponse>(
                       future: _beersFuture,
                       builder: (context, snapshot) {
-                        // Carregant
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const Center(
@@ -87,17 +104,16 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
                           );
                         }
 
-                        // Error
                         if (snapshot.hasError) {
                           return Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.error_outline,
-                                    size: 48, color: Colors.red),
+                                const Icon(Icons.wifi_off,
+                                    size: 48, color: Colors.grey),
                                 const SizedBox(height: 8),
-                                Text(
-                                  'Error carregant les begudes\n${snapshot.error}',
+                                const Text(
+                                  'Sense connexió i sense dades en cache.\nConnecta\'t a internet per carregar les begudes.',
                                   textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 16),
@@ -112,18 +128,14 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
                           );
                         }
 
-                        // Dades carregades
                         final beers = snapshot.data!.beers;
 
                         if (_beerHistory.isNotEmpty) {
                           beers.sort((a, b) {
                             final indexA = _beerHistory.indexOf(a.id);
                             final indexB = _beerHistory.indexOf(b.id);
-
-                            // Si no està a l'historial, va al final
                             final posA = indexA == -1 ? 999 : indexA;
                             final posB = indexB == -1 ? 999 : indexB;
-
                             return posA.compareTo(posB);
                           });
                         }
@@ -145,16 +157,6 @@ class _ChooseDrinkScreenState extends State<ChooseDrinkScreen> {
                           ),
                           itemCount: beers.length,
                           itemBuilder: (context, index) {
-                            /*
-                            if (index == beers.length) {
-                              return DrinkCard(
-                                text: 'Afegeix',
-                                imageAsset: 'assets/images/altres.png',
-                                onTap: () =>
-                                    Navigator.pushNamed(context, '/crea_beer'),
-                              );
-                            }
-                            */
                             final beer = beers[index];
                             return DrinkCard(
                               text: beer.name,

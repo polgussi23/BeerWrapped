@@ -249,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           setState(() => _loadUser());
                         },
                       ),
-                      _EditOption(
+                      /*_EditOption(
                         icon: Icons.email_outlined,
                         label: 'Canviar email',
                         onTap: () async {
@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                           setState(() => _loadUser());
                         },
-                      ),
+                      ),*/
                       _EditOption(
                         icon: Icons.lock_outline,
                         label: 'Canviar contrasenya',

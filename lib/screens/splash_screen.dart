@@ -2,6 +2,7 @@ import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birrawrapped/services/sync_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -79,7 +80,8 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacementNamed(context, '/chooseDay');
       return;
     }
-
+    SyncService()
+        .syncPending(); // sincronitza birres pendents de sessions anteriors
     Navigator.pushReplacementNamed(context, '/home');
   }
 

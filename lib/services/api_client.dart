@@ -11,6 +11,8 @@ class ApiClient {
   factory ApiClient() => _instance;
   ApiClient._internal();
 
+  static const Duration TIMEOUT_DURATION = Duration(seconds: 8);
+
   // Variables internes
   String? _accessToken;
   String? _refreshToken;
@@ -49,7 +51,8 @@ class ApiClient {
       queryParameters: queryParams,
     );
 
-    final response = await http.get(uri, headers: _headers);
+    final response =
+        await http.get(uri, headers: _headers).timeout(TIMEOUT_DURATION);
 
     if (response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
@@ -65,8 +68,9 @@ class ApiClient {
   // POST
   Future<dynamic> post(String endpoint, Map<String, dynamic> body) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final response =
-        await http.post(uri, headers: _headers, body: jsonEncode(body));
+    final response = await http
+        .post(uri, headers: _headers, body: jsonEncode(body))
+        .timeout(TIMEOUT_DURATION);
     if (response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
       if (refreshed) {
@@ -81,8 +85,9 @@ class ApiClient {
   // PUT
   Future<dynamic> put(String endpoint, Map<String, dynamic> body) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final response =
-        await http.put(uri, headers: _headers, body: jsonEncode(body));
+    final response = await http
+        .put(uri, headers: _headers, body: jsonEncode(body))
+        .timeout(TIMEOUT_DURATION);
     if (response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
       if (refreshed) {
@@ -131,7 +136,8 @@ class ApiClient {
 
   Future<dynamic> delete(String endpoint) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final response = await http.delete(uri, headers: _headers);
+    final response =
+        await http.delete(uri, headers: _headers).timeout(TIMEOUT_DURATION);
 
     if (response.statusCode == 401 || response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
@@ -154,7 +160,7 @@ class ApiClient {
           'Authorization': 'Bearer $_refreshToken'
         },
         //body: jsonEncode({'refreshToken': _refreshToken}),
-      );
+      ).timeout(TIMEOUT_DURATION);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
