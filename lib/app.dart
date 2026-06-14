@@ -20,12 +20,56 @@ import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/chooseDay_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:app_links/app_links.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _appLinks = AppLinks();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+  }
+
+  Future<void> _initDeepLinks() async {
+    // App oberta des de zero pel link
+    final initialLink = await _appLinks.getInitialLink();
+    if (initialLink != null) _handleLink(initialLink);
+
+    // App ja oberta en segon pla
+    _appLinks.uriLinkStream.listen((uri) => _handleLink(uri));
+  }
+
+  void _handleLink(Uri uri) {
+    if (uri.path == '/join') {
+      final code = uri.queryParameters['code'];
+      if (code == null) return;
+
+      final userProvider = _navigatorKey.currentContext?.read<UserProvider>();
+      final isLoggedIn = userProvider?.getUserId() != null;
+
+      if (isLoggedIn) {
+        _navigatorKey.currentState?.pushNamed('/joinGroup', arguments: code);
+      } else {
+        // Guardem el codi i el processem després del login
+        userProvider?.setPendingGroupCode(code);
+        _navigatorKey.currentState?.pushNamed('/login');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<UserProvider>().loadSession();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      navigatorKey: _navigatorKey,
       title: 'Birra Wrapped',
       theme: ThemeData(
         primarySwatch: Colors.red,

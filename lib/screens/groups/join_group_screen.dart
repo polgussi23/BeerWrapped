@@ -27,6 +27,21 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is String && _codeController.text.isEmpty) {
+      _codeController.text = args;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _confirmJoin());
+    }
+  }
+
   Future<void> _confirmJoin() async {
     final code = _codeController.text.trim().toUpperCase();
 

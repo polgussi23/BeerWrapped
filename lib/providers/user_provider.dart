@@ -14,6 +14,7 @@ class UserProvider extends ChangeNotifier {
   String? _emailVerified;
   DateTime? _startDay;
   DateTime? _birthDate;
+  String? _pendingGroupCode;
 
   String? _accessToken;
   String? _refreshToken;
@@ -57,6 +58,13 @@ class UserProvider extends ChangeNotifier {
 
   DateTime? getBirthDate() {
     return _birthDate;
+  }
+
+  String? get pendingGroupCode => _pendingGroupCode;
+
+  void setPendingGroupCode(String? code) {
+    _pendingGroupCode = code;
+    notifyListeners();
   }
 
   Future<void> setEmailVerified() async {

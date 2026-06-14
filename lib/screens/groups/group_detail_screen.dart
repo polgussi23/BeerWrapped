@@ -6,6 +6,7 @@ import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/groups_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class GroupDetailScreen extends StatefulWidget {
   const GroupDetailScreen({Key? key}) : super(key: key);
@@ -49,6 +50,85 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
               ),
             ),
           ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Tancar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showGroupQR(BuildContext context, String code) {
+    final inviteUrl = 'http://192.168.1.40:3100/join?code=$code';
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFFEDE4D3),
+        title: const Text(
+          'Convida al grup',
+          style: TextStyle(fontFamily: 'Kameron', fontWeight: FontWeight.bold),
+        ),
+        content: SizedBox(
+          width: 260,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Escaneja el QR o comparteix el codi:',
+                style: TextStyle(fontFamily: 'Kameron'),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: QrImageView(
+                  data: inviteUrl, // <-- la URL completa, no només el codi
+                  version: QrVersions.auto,
+                  size: 180,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFB5884C),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      code,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Kameron',
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 5,
+                      ),
+                    ),
+                    const Text(
+                      'codi d\'accés manual',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white70,
+                        fontFamily: 'Kameron',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -316,14 +396,14 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                               ),
                               GestureDetector(
                                 onTap: () =>
-                                    _showGroupCode(context, group['code']),
+                                    _showGroupQR(context, group['code']),
                                 child: const Row(
                                   children: [
-                                    Icon(Icons.key,
+                                    Icon(Icons.qr_code,
                                         size: 12, color: Color(0xFFB5884C)),
                                     SizedBox(width: 4),
                                     Text(
-                                      'Veure codi d\'accés',
+                                      'Convida algú',
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Color(0xFFB5884C),
