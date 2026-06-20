@@ -1,9 +1,10 @@
 // screens/wrapped/slides/slide_chart_moments.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class SlideChartMoments extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideChartMoments({Key? key, required this.data}) : super(key: key);
 
@@ -60,12 +61,11 @@ class _SlideChartMomentsState extends State<SlideChartMoments>
 
   @override
   Widget build(BuildContext context) {
-    final beersByMoment =
-        widget.data['charts']['beersByMoment'] as List<dynamic>;
+    final beersByMoment = widget.data.beersByMoment as List<dynamic>;
 
     final Map<String, int> momentMap = {};
     for (final item in beersByMoment) {
-      momentMap[item['moment'] as String] = item['count'] as int;
+      momentMap[item.moment] = item.count;
     }
 
     final maxY = momentMap.values.isEmpty

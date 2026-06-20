@@ -1,16 +1,15 @@
 // screens/wrapped/slides/slide_final.dart
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SlideFinal extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideFinal({Key? key, required this.data}) : super(key: key);
 
@@ -76,31 +75,12 @@ class _SlideFinalState extends State<SlideFinal>
     }
   }
 
-  String _whereToGo() {
-    final DateTime now = DateTime.now();
-    final DateTime today = DateTime(now.year, now.month, now.day);
-
-    final up = context.read<UserProvider>();
-
-    final DateTime startDay = up.getStartDay()!;
-    final DateTime finalDay =
-        DateTime(startDay.year + 1, startDay.month, startDay.day);
-
-    if (startDay.isAfter(today)) {
-      return "/waittostart";
-    } else if (finalDay.isBefore(today)) {
-      return "/chooseDay";
-    } else {
-      return "/home";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final totals = widget.data['totals'];
-    final favBeer = widget.data['favBeer'];
-    final bestDay = widget.data['bestDayOfWeek'];
-    final maxStreak = widget.data['maxStreak'];
+    //final totals = widget.data.totalBeers;
+    final favBeer = widget.data.favBeerName;
+    final bestDay = widget.data.bestDayOfWeek;
+    final maxStreak = widget.data.maxStreak;
 
     return Container(
       decoration: const BoxDecoration(
@@ -173,25 +153,26 @@ class _SlideFinalState extends State<SlideFinal>
                           _StatRow(
                             emoji: '🍺',
                             label: 'Total birres',
-                            value: '${totals['totalBeers']}',
+                            value: '${widget.data.totalBeers}',
                           ),
                           _StatRow(
                             emoji: '💧',
                             label: 'Total litres',
-                            value: '${totals['totalLiters']}L',
+                            value: '${widget.data.totalLiters}L',
                           ),
                           if (favBeer != null)
                             _StatRow(
                               emoji: '🏆',
                               label: 'Preferida',
                               value:
-                                  '${(favBeer['name'] as String).substring(0, 1).toUpperCase()}${(favBeer['name'] as String).substring(1)} (${favBeer['percentage']}%)',
+                                  '${(widget.data.favBeerName as String).substring(0, 1).toUpperCase()}${(widget.data.favBeerName as String).substring(1)} (${widget.data.favBeerPct}%)',
                             ),
                           if (bestDay != null)
                             _StatRow(
                               emoji: '📅',
                               label: 'Dia preferit',
-                              value: bestDay['day'],
+                              value: widget.data.bestDayOfWeek as String,
+                              //value: bestDay['day'],
                             ),
                           _StatRow(
                             emoji: '🔥',

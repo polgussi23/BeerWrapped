@@ -1,8 +1,9 @@
 // screens/wrapped/slides/slide_total_beers.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideTotalBeers extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideTotalBeers({Key? key, required this.data}) : super(key: key);
 
@@ -18,7 +19,7 @@ class _SlideTotalBeersState extends State<SlideTotalBeers>
   @override
   void initState() {
     super.initState();
-    final total = widget.data['totals']['totalBeers'] as int;
+    final total = widget.data.totalBeers;
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -37,7 +38,7 @@ class _SlideTotalBeersState extends State<SlideTotalBeers>
 
   @override
   Widget build(BuildContext context) {
-    final totalLiters = widget.data['totals']['totalLiters'];
+    final totalLiters = widget.data.totalLiters;
 
     return Container(
       decoration: const BoxDecoration(

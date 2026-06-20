@@ -1,9 +1,10 @@
 // screens/wrapped/slides/slide_chart_types.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class SlideChartTypes extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideChartTypes({Key? key, required this.data}) : super(key: key);
 
@@ -59,9 +60,9 @@ class _SlideChartTypesState extends State<SlideChartTypes>
 
   @override
   Widget build(BuildContext context) {
-    final beersByType = widget.data['charts']['beersByType'] as List<dynamic>;
+    final beersByType = widget.data.beersByType as List<dynamic>;
     final total =
-        beersByType.fold<int>(0, (sum, item) => sum + (item['count'] as int));
+        beersByType.fold<int>(0, (sum, item) => sum + (item.count as int));
 
     return Container(
       decoration: const BoxDecoration(
@@ -112,7 +113,7 @@ class _SlideChartTypesState extends State<SlideChartTypes>
                     ),
                     sections: List.generate(beersByType.length, (index) {
                       final item = beersByType[index];
-                      final count = item['count'] as int;
+                      final count = item.count;
                       final percentage = (count / total * 100);
                       final isTouched = index == _touchedIndex;
 
@@ -143,7 +144,7 @@ class _SlideChartTypesState extends State<SlideChartTypes>
               alignment: WrapAlignment.center,
               children: List.generate(beersByType.length, (index) {
                 final item = beersByType[index];
-                final name = item['name'] as String;
+                final name = item.name as String;
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

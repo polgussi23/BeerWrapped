@@ -1,4 +1,4 @@
-// screens/wrapped/wrapped_screen.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/user_service.dart';
 import 'package:birrawrapped/screens/wrapped/slides/slide_intro.dart';
@@ -12,6 +12,9 @@ import 'package:birrawrapped/screens/wrapped/slides/slide_chart_months.dart';
 import 'package:birrawrapped/screens/wrapped/slides/slide_chart_types.dart';
 import 'package:birrawrapped/screens/wrapped/slides/slide_chart_moments.dart';
 import 'package:birrawrapped/screens/wrapped/slides/slide_best_group.dart';
+import 'package:birrawrapped/screens/wrapped/slides/slide_records.dart';
+import 'package:birrawrapped/screens/wrapped/slides/slide_evolution.dart';
+import 'package:birrawrapped/screens/wrapped/slides/slide_highlights.dart';
 import 'package:birrawrapped/screens/wrapped/slides/slide_final.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +30,7 @@ class WrappedScreen extends StatefulWidget {
 class _WrappedScreenState extends State<WrappedScreen>
     with TickerProviderStateMixin {
   int _currentSlide = 0;
-  Map<String, dynamic>? _wrappedData;
+  WrappedData? _wrappedData;
   bool _isLoading = true;
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
@@ -54,19 +57,17 @@ class _WrappedScreenState extends State<WrappedScreen>
 
   Future<void> _loadData() async {
     final userId = context.read<UserProvider>().getUserId();
+    final raw = await UserService().getWrappedData(userId!);
 
-    final data = await UserService().getWrappedData(userId.toString());
-
-    // Guardem que ha vist el wrapped quan el carrega per primera vegada
     final prefs = await SharedPreferences.getInstance();
-    final wrappedSeenDate = prefs.getString('wrappedSeenDate');
-    if (wrappedSeenDate == null) {
+    if (prefs.getString('wrappedSeenDate') == null) {
       await prefs.setString(
           'wrappedSeenDate', DateTime.now().toIso8601String());
     }
 
+    if (!mounted) return;
     setState(() {
-      _wrappedData = data;
+      _wrappedData = raw;
       _isLoading = false;
     });
     _animController.forward();
@@ -102,6 +103,10 @@ class _WrappedScreenState extends State<WrappedScreen>
         SlideChartTypes(data: _wrappedData!),
         SlideChartMoments(data: _wrappedData!),
         SlideBestGroup(data: _wrappedData!),
+        // Noves slides:
+        SlideRecords(data: _wrappedData!),
+        SlideEvolution(data: _wrappedData!),
+        SlideHighlights(data: _wrappedData!),
         SlideFinal(data: _wrappedData!),
       ];
 
@@ -130,6 +135,18 @@ class _WrappedScreenState extends State<WrappedScreen>
       );
     }
 
+    if (_wrappedData == null) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Text(
+            'No s\'han pogut carregar les dades.',
+            style: TextStyle(color: Colors.white70, fontFamily: 'Kameron'),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
@@ -143,12 +160,10 @@ class _WrappedScreenState extends State<WrappedScreen>
         },
         child: Stack(
           children: [
-            // Slide actual amb fade
             FadeTransition(
               opacity: _fadeAnim,
               child: _slides[_currentSlide],
             ),
-            // Indicador de progrés a dalt
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
               left: 16,

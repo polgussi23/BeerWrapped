@@ -1,8 +1,9 @@
 // screens/wrapped/slides/slide_best_day.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideBestDay extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideBestDay({Key? key, required this.data}) : super(key: key);
 
@@ -50,9 +51,9 @@ class SlideBestDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bestDay = data['bestDayOfWeek'];
-    final day = bestDay['day'] as String;
-    final count = bestDay['count'];
+    //final bestDay = data.bestDayOfWeek;
+    final day = data.bestDayOfWeek as String;
+    final count = data.bestDayCount;
 
     return Container(
       decoration: const BoxDecoration(

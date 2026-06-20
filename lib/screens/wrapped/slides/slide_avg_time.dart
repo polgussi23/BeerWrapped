@@ -1,8 +1,9 @@
 // screens/wrapped/slides/slide_avg_time.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideAvgTime extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideAvgTime({Key? key, required this.data}) : super(key: key);
 
@@ -28,7 +29,7 @@ class SlideAvgTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avgTime = data['avgTime'] as String;
+    final avgTime = data.avgTime as String;
 
     return Container(
       decoration: const BoxDecoration(

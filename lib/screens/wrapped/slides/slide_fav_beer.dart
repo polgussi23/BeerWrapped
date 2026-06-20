@@ -1,17 +1,18 @@
 // screens/wrapped/slides/slide_fav_beer.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideFavBeer extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideFavBeer({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final favBeer = data['favBeer'];
-    final name = favBeer['name'] as String;
-    final percentage = favBeer['percentage'];
-    final count = favBeer['count'];
+    //final favBeer = data.favb;
+    final name = data.favBeerName as String;
+    final percentage = data.favBeerPct;
+    final count = data.favBeerCount;
 
     return Container(
       decoration: const BoxDecoration(

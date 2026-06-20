@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:birrawrapped/services/api_client.dart';
 import 'package:intl/intl.dart';
+import 'package:birrawrapped/models/wrapped_data.dart';
 
 class UserService {
   final _client = ApiClient();
@@ -48,12 +49,14 @@ class UserService {
     return data['profile_image'];
   }
 
-  Future<Map<String, dynamic>> getWrappedData(String userId) async {
-    final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final data = await _client.get(
-      '/api/users/$userId/wrapped',
-      queryParams: {'today': today},
-    );
-    return data['wrapped'];
+  Future<WrappedData?> getWrappedData(int userId) async {
+    try {
+      final data = await _client.get('/api/users/$userId/wrapped');
+      final wrapped = data['wrapped'] as Map<String, dynamic>;
+      return WrappedData.fromJson(wrapped);
+    } catch (e) {
+      print('Error carregant wrapped data: $e');
+      return null;
+    }
   }
 }

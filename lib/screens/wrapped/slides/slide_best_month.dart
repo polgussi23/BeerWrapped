@@ -1,8 +1,9 @@
 // screens/wrapped/slides/slide_best_month.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideBestMonth extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideBestMonth({Key? key, required this.data}) : super(key: key);
 
@@ -43,10 +44,9 @@ class SlideBestMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bestMonth = data['bestMonth'];
-    final month = bestMonth['month'] as int;
-    final year = bestMonth['year'];
-    final count = bestMonth['count'];
+    final month = data.bestMonth as int;
+    final year = data.bestMonthYear;
+    final count = data.bestMonthCount;
 
     return Container(
       decoration: const BoxDecoration(

@@ -1,14 +1,15 @@
 // screens/wrapped/slides/slide_best_group.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideBestGroup extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideBestGroup({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bestGroup = data['bestGroup'];
+    final bestGroup = data.bestGroupName;
 
     if (bestGroup == null) {
       return Container(
@@ -55,8 +56,8 @@ class SlideBestGroup extends StatelessWidget {
       );
     }
 
-    final name = bestGroup['name'] as String;
-    final count = bestGroup['count'];
+    final name = data.bestGroupName as String;
+    final count = data.bestGroupCount;
 
     return Container(
       decoration: const BoxDecoration(

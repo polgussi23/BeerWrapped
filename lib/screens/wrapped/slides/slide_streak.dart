@@ -1,8 +1,9 @@
 // screens/wrapped/slides/slide_streak.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:flutter/material.dart';
 
 class SlideStreak extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideStreak({Key? key, required this.data}) : super(key: key);
 
@@ -18,7 +19,7 @@ class _SlideStreakState extends State<SlideStreak>
   @override
   void initState() {
     super.initState();
-    final streak = widget.data['maxStreak'] as int;
+    final streak = widget.data.maxStreak;
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -44,7 +45,7 @@ class _SlideStreakState extends State<SlideStreak>
 
   @override
   Widget build(BuildContext context) {
-    final streak = widget.data['maxStreak'] as int;
+    final streak = widget.data.maxStreak;
 
     return Container(
       decoration: const BoxDecoration(

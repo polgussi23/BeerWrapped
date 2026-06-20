@@ -1,9 +1,10 @@
 // screens/wrapped/slides/slide_chart_months.dart
+import 'package:birrawrapped/models/wrapped_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class SlideChartMonths extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final WrappedData data;
 
   const SlideChartMonths({Key? key, required this.data}) : super(key: key);
 
@@ -51,12 +52,9 @@ class _SlideChartMonthsState extends State<SlideChartMonths>
 
   @override
   Widget build(BuildContext context) {
-    final beersByMonth = widget.data['charts']['beersByMonth'] as List<dynamic>;
-
-    // Construïm un map mes -> count
     final Map<int, int> monthMap = {};
-    for (final item in beersByMonth) {
-      monthMap[item['month'] as int] = item['count'] as int;
+    for (final item in widget.data.beersByMonth) {
+      monthMap[item.month] = item.count;
     }
 
     final maxY = monthMap.values.isEmpty
