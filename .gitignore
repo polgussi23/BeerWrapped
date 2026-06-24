@@ -43,7 +43,5 @@ app.*.map.json
 /android/app/release
 key.properties
 *.jks
-.env
-/windows/
-/linux/
-/macos/
+
+*.env
