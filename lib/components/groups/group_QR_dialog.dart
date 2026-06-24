@@ -117,7 +117,7 @@ class _GroupQrDialogContent extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () {
                   Share.share(
-                    'Uneix-te al meu grup! 🍺\n$inviteUrl\n\nCodi: $code',
+                    'Uneix-te al meu grup del BirraWrapped! 🍺\n$inviteUrl\n\nCodi: $code',
                   );
                 },
                 icon: const Icon(Icons.share, color: Colors.white),
