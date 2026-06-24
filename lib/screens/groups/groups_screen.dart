@@ -33,13 +33,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
     return GroupsService().getAllUserGroups(userId.toString());
   }
 
-  void _leaveGroup(int group) {
+  void _leaveGroup(String name, int id) {
     final userId = context.read<UserProvider>().getUserId();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Sortir del grup'),
-        content: Text('Segur que vols sortir de "${group}"?'),
+        content: Text('Segur que vols sortir de "${name}"?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -47,7 +47,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
-              await GroupsService().removeMember(group, userId!);
+              await GroupsService().removeMember(id, userId!);
               setState(() {
                 _loadGroups();
               });
@@ -163,7 +163,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           title: Text('Sortir del grup'),
                                           onTap: () {
                                             Navigator.pop(context);
-                                            _leaveGroup(group['id']);
+                                            _leaveGroup(
+                                                group['name'], group['id']);
                                           },
                                         ),
                                       ],

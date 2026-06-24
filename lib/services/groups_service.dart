@@ -1,4 +1,5 @@
 // services/groups_service.dart
+import 'package:birrawrapped/models/group_user_info.dart';
 import 'package:birrawrapped/services/api_client.dart';
 
 class GroupsService {
@@ -37,6 +38,28 @@ class GroupsService {
         .toList();
   }
 
+  Future<GroupUserInfo?> getGroupUserInfo(String groupId, String userId) async {
+    try {
+      final response = await _client.get('/api/groups/$groupId/info/$userId');
+      final dynamic info = response['userInfo'];
+      if (info == null) return null;
+
+      return GroupUserInfo.fromJson(info as Map<String, dynamic>);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateGroupUserPrivacy(
+      String groupId, String userId, String privacy) async {
+    try {
+      await _client
+          .put('/api/groups/$groupId/privacy/$userId', {'privacy': privacy});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // GET /api/groups/:groupId/members — membres del grup
   Future<List<Map<String, dynamic>>> getMembersOfGroup(String groupId) async {
     final data = await _client.get('/api/groups/$groupId/members');
@@ -47,6 +70,7 @@ class GroupsService {
               'username': item['username'],
               'profileImage': item['profile_image'],
               'role': item['role'],
+              'privacy': item['privacy'],
             })
         .toList();
   }

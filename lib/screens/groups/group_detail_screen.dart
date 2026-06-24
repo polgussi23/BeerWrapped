@@ -1,12 +1,17 @@
 // screens/groups/group_detail_screen.dart
+import 'package:birrawrapped/components/groups/group_QR_dialog.dart';
 import 'package:birrawrapped/components/groups/group_history_tab.dart';
 import 'package:birrawrapped/components/groups/group_meetups_tab.dart';
 import 'package:birrawrapped/components/custom_background.dart';
+import 'package:birrawrapped/components/loading_screen.dart';
+import 'package:birrawrapped/models/group_user_info.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/groups_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:share_plus/share_plus.dart';
 
 class GroupDetailScreen extends StatefulWidget {
   const GroupDetailScreen({Key? key}) : super(key: key);
@@ -16,53 +21,32 @@ class GroupDetailScreen extends StatefulWidget {
 }
 
 class _GroupDetailScreenState extends State<GroupDetailScreen> {
-  void _showGroupCode(BuildContext context, String code) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFFEDE4D3),
-        title: const Text(
-          'Codi d\'accés',
-          style: TextStyle(fontFamily: 'Kameron', fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Comparteix aquest codi perquè altres es puguin unir:'),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFB5884C),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                code,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: 'Kameron',
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 4,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Tancar'),
-          ),
-        ],
-      ),
-    );
+  GroupUserInfo? _groupUserInfo;
+  bool _isLoadingUserInfo = true;
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _groupUserInfo =
+        GroupUserInfo(role: '', privacy: '', canChangeToPrivate: false);
   }
 
-  void _showGroupQR(BuildContext context, String code) {
-    final inviteUrl = 'http://192.168.1.40:3100/join?code=$code';
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      _initialized = true;
+      final group =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      _getUserInfo(group['id'].toString());
+    }
+  }
+
+  /*void _showGroupQR(BuildContext context, String code) {
+    final baseUrl = dotenv.env['API_URL'] ?? 'http://217.160.2.122:3100';
+    //final baseUrl = 'http://birrawrapped.polgussi.cat:3100';
+    final inviteUrl = '$baseUrl/join?code=$code';
 
     showDialog(
       context: context,
@@ -98,7 +82,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
               Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 decoration: BoxDecoration(
                   color: const Color(0xFFB5884C),
                   borderRadius: BorderRadius.circular(8),
@@ -110,10 +94,10 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Kameron',
-                        fontSize: 22,
+                        fontSize: 14, // <-- abans 22
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        letterSpacing: 5,
+                        letterSpacing: 3, // <-- abans 5
                       ),
                     ),
                     const Text(
@@ -127,6 +111,29 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Share.share(
+                      'Uneix-te al meu grup del BirraWrapped! 🍺\n$inviteUrl\n\nCodi: $code',
+                    );
+                  },
+                  icon: const Icon(Icons.share, color: Colors.white),
+                  label: const Text(
+                    'Compartir',
+                    style:
+                        TextStyle(fontFamily: 'Kameron', color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF25D366), // verd WhatsApp
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -138,7 +145,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         ],
       ),
     );
-  }
+  }*/
 
   Future<void> _showMembers(
       BuildContext context, Map<String, dynamic> group) async {
@@ -163,6 +170,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
       );
       final currentUserRole = currentUserMember['role'];
       final canManage = ['admin', 'owner'].contains(currentUserRole);
+      // També el tipus de privacitat
 
       showDialog(
         context: context,
@@ -354,12 +362,95 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     }
   }
 
+  Future<void> _getUserInfo(String groupId) async {
+    final userId = context.read<UserProvider>().getUserId();
+    GroupUserInfo? g = await GroupsService()
+        .getGroupUserInfo(groupId.toString(), userId.toString());
+
+    if (!mounted) return;
+
+    setState(() {
+      _groupUserInfo = g;
+      _isLoadingUserInfo = false;
+    });
+  }
+
+  Future<void> _changeGroupUserPrivacy(String groupId, String privacy) async {
+    final newPrivacy = privacy == "public" ? "private" : "public";
+
+    //Color(0xFFEDE4D3)
+    // 1. Comprovació local abans de res (evita una petició innecessària)
+    if (newPrivacy == "private" && !_groupUserInfo!.canChangeToPrivate) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "No pots tornar a privat fins que no passin 24h des de l'últim canvi a públic.",
+          ),
+        ),
+      );
+      return;
+    }
+
+    // 2. Diàleg de confirmació
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFFEDE4D3),
+        title: const Text('Canviar privacitat'),
+        content: Text(
+          newPrivacy == 'public'
+              ? "Vols fer públic el teu historial dins d'aquest grup?"
+              : "Vols fer privat el teu historial dins d'aquest grup?",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text(
+              'Cancel·lar',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child:
+                const Text('Confirmar', style: TextStyle(color: Colors.black)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    if (!mounted) return;
+
+    // 3. Petició al backend
+    try {
+      final userId = context.read<UserProvider>().getUserId();
+      await GroupsService()
+          .updateGroupUserPrivacy(groupId, userId.toString(), newPrivacy);
+
+      if (!mounted) return;
+
+      // 4. Refresquem la info de l'usuari per mantenir-la sincronitzada amb el backend
+      await _getUserInfo(groupId);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final group =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final userId = context.read<UserProvider>().getUserId();
-    final isOwner = group['ownerId'] == userId;
+
+    if (_isLoadingUserInfo) {
+      return LoadingScreen(
+        text: "Carregant grup...",
+        title: group['name'],
+      );
+    }
 
     return DefaultTabController(
       length: 2,
@@ -396,7 +487,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                               ),
                               GestureDetector(
                                 onTap: () =>
-                                    _showGroupQR(context, group['code']),
+                                    GroupQrDialog.show(context, group['code']),
                                 child: const Row(
                                   children: [
                                     Icon(Icons.qr_code,
@@ -416,6 +507,16 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                             ],
                           ),
                         ),
+                        IconButton(
+                            onPressed: () => _changeGroupUserPrivacy(
+                                group['id'].toString(),
+                                _groupUserInfo!.privacy),
+                            icon: Icon(
+                                _groupUserInfo!.privacy == "public"
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.white70,
+                                size: 26)),
                         // Botó de membres
                         IconButton(
                           icon: const Icon(Icons.group,
@@ -461,7 +562,9 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: TabBarView(
                         children: [
-                          GroupHistoryTab(groupId: group['id']),
+                          GroupHistoryTab(
+                              groupId: group['id'],
+                              privacy: _groupUserInfo!.privacy),
                           GroupMeetupsTab(groupId: group['id']),
                         ],
                       ),

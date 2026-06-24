@@ -1,11 +1,17 @@
 // components/groups/group_history_tab.dart
+import 'package:birrawrapped/models/group_user_info.dart';
+import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/groups_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GroupHistoryTab extends StatefulWidget {
   final int groupId;
+  final String privacy;
 
-  const GroupHistoryTab({Key? key, required this.groupId}) : super(key: key);
+  const GroupHistoryTab(
+      {Key? key, required this.groupId, required this.privacy})
+      : super(key: key);
 
   @override
   _GroupHistoryTabState createState() => _GroupHistoryTabState();
@@ -13,11 +19,18 @@ class GroupHistoryTab extends StatefulWidget {
 
 class _GroupHistoryTabState extends State<GroupHistoryTab> {
   late Future<List<Map<String, dynamic>>> _historyFuture;
+  //late Future<GroupUserInfo?> _userInfo;
 
   @override
   void initState() {
     super.initState();
-    _historyFuture = _fetchHistory();
+    //_historyFuture = Future.value(<Map<String, dynamic>>[]);
+    //_getUserInfo();
+    if (widget.privacy == "public") {
+      _historyFuture = _fetchHistory();
+    } else {
+      _historyFuture = Future.value(<Map<String, dynamic>>[]);
+    }
   }
 
   Future<List<Map<String, dynamic>>> _fetchHistory() async {

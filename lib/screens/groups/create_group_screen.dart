@@ -1,6 +1,7 @@
 // screens/groups/create_group_screen.dart
 import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/custom_small_title.dart';
+import 'package:birrawrapped/components/groups/group_QR_dialog.dart';
 import 'package:birrawrapped/components/groups/group_cancel_button.dart';
 import 'package:birrawrapped/components/groups/group_primary_button.dart';
 import 'package:birrawrapped/components/groups/group_text_field.dart';
@@ -46,6 +47,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
       if (!mounted) return;
 
+      /*
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -93,6 +95,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           ],
         ),
       );
+      */
+      await GroupQrDialog.show(
+        context,
+        result['code'],
+        title: 'Grup creat!',
+        message: 'Comparteix aquest codi perquè altres es puguin unir:',
+        barrierDismissible: false,
+      );
+      Navigator.pop(context);
     } catch (e) {
       setState(
           () => _errorMessage = 'Error al crear el grup. Torna-ho a intentar.');
