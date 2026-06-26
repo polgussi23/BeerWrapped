@@ -269,7 +269,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           '/editPassword',
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Tens una idea revolucionària pel BirraWrapped?",
+                        style: TextStyle(color: Color(0xFFEDE4D3), height: 1),
+                        textAlign: TextAlign.center,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/sendIdea');
+                          },
+                          child: const Text(
+                            "Envia-la!",
+                            style: TextStyle(color: Color(0xFFEDE4D3)),
+                            textAlign: TextAlign.center,
+                          )),
+                      const SizedBox(height: 32),
 
                       // Logout
                       LogoutButton(onPressed: () {
