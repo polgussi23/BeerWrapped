@@ -1,7 +1,6 @@
 // services/user_service.dart
 import 'dart:io';
 import 'package:birrawrapped/services/api_client.dart';
-import 'package:intl/intl.dart';
 import 'package:birrawrapped/models/wrapped_data.dart';
 
 class UserService {
@@ -47,6 +46,13 @@ class UserService {
       'photo',
     );
     return data['profile_image'];
+  }
+
+  Future<void> sendNewIdea(String userId, String assumpte, String body) async {
+    await _client.post(
+      '/api/users/$userId/idea',
+      {"assumpte": assumpte, "body": body},
+    );
   }
 
   Future<WrappedData?> getWrappedData(int userId) async {

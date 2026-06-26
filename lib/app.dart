@@ -10,6 +10,7 @@ import 'package:birrawrapped/screens/main_screen.dart';
 import 'package:birrawrapped/screens/profile/edit_email_screen.dart';
 import 'package:birrawrapped/screens/profile/edit_password_screen.dart';
 import 'package:birrawrapped/screens/profile/edit_username_screen.dart';
+import 'package:birrawrapped/screens/sendIdea_screen.dart';
 import 'package:birrawrapped/screens/splash_screen.dart';
 import 'package:birrawrapped/screens/verify_email_screen.dart';
 import 'package:birrawrapped/screens/waitToStart_screen.dart';
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
         '/editPassword': (context) => const EditPasswordScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/wrapped': (context) => const WrappedScreen(),
+        '/sendIdea': (context) => const sendIdeaScreen(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
