@@ -44,4 +44,4 @@ app.*.map.json
 key.properties
 *.jks
 
-*.env
+.env
