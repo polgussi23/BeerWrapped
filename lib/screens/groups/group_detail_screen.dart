@@ -43,110 +43,6 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     }
   }
 
-  /*void _showGroupQR(BuildContext context, String code) {
-    final baseUrl = dotenv.env['API_URL'] ?? 'http://217.160.2.122:3100';
-    //final baseUrl = 'http://birrawrapped.polgussi.cat:3100';
-    final inviteUrl = '$baseUrl/join?code=$code';
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFFEDE4D3),
-        title: const Text(
-          'Convida al grup',
-          style: TextStyle(fontFamily: 'Kameron', fontWeight: FontWeight.bold),
-        ),
-        content: SizedBox(
-          width: 260,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Escaneja el QR o comparteix el codi:',
-                style: TextStyle(fontFamily: 'Kameron'),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: QrImageView(
-                  data: inviteUrl, // <-- la URL completa, no només el codi
-                  version: QrVersions.auto,
-                  size: 180,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFB5884C),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      code,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Kameron',
-                        fontSize: 14, // <-- abans 22
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 3, // <-- abans 5
-                      ),
-                    ),
-                    const Text(
-                      'codi d\'accés manual',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.white70,
-                        fontFamily: 'Kameron',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 14),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Share.share(
-                      'Uneix-te al meu grup del BirraWrapped! 🍺\n$inviteUrl\n\nCodi: $code',
-                    );
-                  },
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  label: const Text(
-                    'Compartir',
-                    style:
-                        TextStyle(fontFamily: 'Kameron', color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF25D366), // verd WhatsApp
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Tancar'),
-          ),
-        ],
-      ),
-    );
-  }*/
-
   Future<void> _showMembers(
       BuildContext context, Map<String, dynamic> group) async {
     final userId = context.read<UserProvider>().getUserId();
@@ -236,8 +132,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       ),
                     ),
                     // Opcions per a admins/owners
-                    trailing: canManage && !isOwner && !isCurrentUser
-                        ? PopupMenuButton<String>(
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (canManage && !isOwner && !isCurrentUser)
+                          PopupMenuButton<String>(
                             icon: const Icon(Icons.more_vert,
                                 color: Colors.black45),
                             onSelected: (value) async {
@@ -269,8 +168,16 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                                 ),
                               ),
                             ],
-                          )
-                        : null,
+                          ),
+                        Icon(
+                          member['privacy'] == 'public'
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black45,
+                          size: 20,
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
