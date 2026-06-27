@@ -3,6 +3,7 @@ import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/custom_small_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/beers_service.dart';
+import 'package:birrawrapped/components/edit_datetime_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,11 +59,117 @@ class _HistorialScreenState extends State<HistorialScreen> {
 
     if (confirm == true) {
       final userId = context.read<UserProvider>().getUserId();
-      // TODO: await BeersService().deleteBeerEntry(beerId);
       await BeersService().deleteUserBeer(userId.toString(), id.toString());
       print('Eliminar beer amb Id: $id');
       setState(() => _loadEntries());
     }
+  }
+
+  Future<void> _editEntryDateTime(Map<String, dynamic> entry) async {
+    final userId = context.read<UserProvider>().getUserId();
+
+    final currentDate =
+        DateTime.tryParse(entry['date'] ?? '') ?? DateTime.now();
+    TimeOfDay currentTime = TimeOfDay.now();
+    final timeStr = entry['time'] as String?;
+    if (timeStr != null && timeStr.contains(':')) {
+      final parts = timeStr.split(':');
+      currentTime = TimeOfDay(
+        hour: int.tryParse(parts[0]) ?? 0,
+        minute: int.tryParse(parts[1]) ?? 0,
+      );
+    }
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => EditDateTimeDialog(
+        initialDate: currentDate,
+        initialTime: currentTime,
+        onSave: (newDate, newTime) async {
+          final dateStr =
+              '${newDate.year}-${newDate.month.toString().padLeft(2, '0')}-${newDate.day.toString().padLeft(2, '0')}';
+          final timeStrFormatted =
+              '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
+          const catalanDays = [
+            'Dilluns',
+            'Dimarts',
+            'Dimecres',
+            'Dijous',
+            'Divendres',
+            'Dissabte',
+            'Diumenge'
+          ];
+          final dayOfWeek = catalanDays[newDate.weekday - 1];
+
+          try {
+            await BeersService().updateBeerToUser(
+              userId.toString(),
+              entry['id'].toString(),
+              dateStr,
+              timeStrFormatted,
+              dayOfWeek,
+            );
+            if (mounted) setState(() => _loadEntries());
+          } catch (e) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('Error en actualitzar la data/hora')),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void _showEntryOptions(Map<String, dynamic> entry) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFFEDE4D3),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ListTile(
+              leading: const Icon(Icons.edit, color: Color(0xFFB5884C)),
+              title: const Text(
+                'Modificar data i hora',
+                style: TextStyle(fontFamily: 'Kameron'),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                _editEntryDateTime(entry);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text(
+                'Eliminar entrada',
+                style: TextStyle(fontFamily: 'Kameron', color: Colors.red),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                _deleteEntry(entry['id']);
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
   }
 
   Map<String, List<Map<String, dynamic>>> _groupByDate(
@@ -194,10 +301,13 @@ class _HistorialScreenState extends State<HistorialScreen> {
                                     ),
                                   ),
                                 ),
-                                ...dayEntries.map((entry) => BeerEntryCard(
-                                      entry: entry,
-                                      onDelete: () => _deleteEntry(entry['id']),
-                                    )),
+                                ...dayEntries.map((entry) => GestureDetector(
+                                      onLongPress: () =>
+                                          _showEntryOptions(entry),
+                                      child: BeerEntryCard(
+                                        entry: entry,
+                                      ),
+                                    ))
                               ],
                             );
                           },

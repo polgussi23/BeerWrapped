@@ -105,6 +105,17 @@ class BeersService {
     print("Beer pujada: ${response['message']}");
   }
 
+  Future<void> updateBeerToUser(String userId, String userBeerId, String date,
+      String time, String dayOfWeek) async {
+    final response =
+        await _client.put('/api/beers/$userId/update-datetime/$userBeerId', {
+      'date': date,
+      'time': time,
+      'dayOfWeek': dayOfWeek,
+    });
+    print("Beer pujada: ${response['message']}");
+  }
+
   Future<void> deleteUserBeer(String userId, String beerId) async {
     final response = await _client.post('/api/beers/$userId/delete-beer', {
       'beerId': beerId,
