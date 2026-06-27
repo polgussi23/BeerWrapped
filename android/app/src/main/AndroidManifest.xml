@@ -15,7 +15,7 @@
     </queries>
     
     <application
-        android:label="birrawrapped"
+        android:label="Birra Wrapped"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
