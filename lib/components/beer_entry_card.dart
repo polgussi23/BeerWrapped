@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 
 class BeerEntryCard extends StatelessWidget {
   final Map<String, dynamic> entry;
-  final VoidCallback onDelete;
 
   const BeerEntryCard({
     Key? key,
     required this.entry,
-    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -33,10 +31,6 @@ class BeerEntryCard extends StatelessWidget {
           ),
         ),
         subtitle: Text(entry['time']),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.red),
-          onPressed: onDelete,
-        ),
       ),
     );
   }
