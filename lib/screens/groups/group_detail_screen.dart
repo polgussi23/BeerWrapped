@@ -306,8 +306,8 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         title: const Text('Canviar privacitat'),
         content: Text(
           newPrivacy == 'public'
-              ? "Vols fer públic el teu historial dins d'aquest grup?"
-              : "Vols fer privat el teu historial dins d'aquest grup?",
+              ? "Vols fer públic el teu historial dins d'aquest grup?\n\nTothom podrà veure les birres que et veus!"
+              : "Vols fer privat el teu historial dins d'aquest grup?\n\nTampoc podràs veure l'historial dels altres membres!",
         ),
         actions: [
           TextButton(
