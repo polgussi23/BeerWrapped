@@ -33,12 +33,57 @@ class _GroupHistoryTabState extends State<GroupHistoryTab> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant GroupHistoryTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.privacy != widget.privacy) {
+      setState(() {
+        if (widget.privacy == "public") {
+          _historyFuture = _fetchHistory();
+        } else {
+          _historyFuture = Future.value(<Map<String, dynamic>>[]);
+        }
+      });
+    }
+  }
+
   Future<List<Map<String, dynamic>>> _fetchHistory() async {
     final date = DateTime.now().subtract(const Duration(days: 2));
     final dateStr =
         '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     return GroupsService()
         .getGroupBeersHistory(widget.groupId.toString(), dateStr);
+  }
+
+  Widget _buildPrivacyWarningCard() {
+    return Card(
+      color: const Color(0xFFEDE4D3),
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: Color(0xFFB5884C), width: 1),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.lock_outline, color: Color(0xFFB5884C)),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'EP! Tens la privacitat activada. L\'historial d\'activitat no és visible.',
+                style: TextStyle(
+                  fontFamily: 'Kameron',
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Map<String, List<Map<String, dynamic>>> _groupByDate(
@@ -79,44 +124,68 @@ class _GroupHistoryTabState extends State<GroupHistoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    final isPrivate = widget.privacy == "private";
+
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: _historyFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Column(
+            children: [
+              if (isPrivate) _buildPrivacyWarningCard(),
+              const Expanded(
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ],
+          );
         }
 
         if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                const SizedBox(height: 8),
-                Text(
-                  'Error carregant l\'historial\n${snapshot.error}',
-                  textAlign: TextAlign.center,
+          return Column(
+            children: [
+              if (isPrivate) _buildPrivacyWarningCard(),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error_outline,
+                          size: 48, color: Colors.red),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Error carregant l\'historial\n${snapshot.error}',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => setState(() {
+                          _historyFuture = _fetchHistory();
+                        }),
+                        child: const Text('Reintentar'),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => setState(() {
-                    _historyFuture = _fetchHistory();
-                  }),
-                  child: const Text('Reintentar'),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         }
 
         final entries = snapshot.data!;
 
         if (entries.isEmpty) {
-          return const Center(
-            child: Text(
-              'Sense activitat els últims 3 dies',
-              textAlign: TextAlign.center,
-            ),
+          return Column(
+            children: [
+              if (isPrivate) _buildPrivacyWarningCard(),
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'Sense activitat els últims 3 dies',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           );
         }
 
@@ -125,9 +194,13 @@ class _GroupHistoryTabState extends State<GroupHistoryTab> {
 
         return ListView.builder(
           padding: const EdgeInsets.only(top: 8, bottom: 16),
-          itemCount: dates.length,
+          itemCount: dates.length + (isPrivate ? 1 : 0),
           itemBuilder: (context, index) {
-            final date = dates[index];
+            if (isPrivate && index == 0) {
+              return _buildPrivacyWarningCard();
+            }
+            final adjustedIndex = isPrivate ? index - 1 : index;
+            final date = dates[adjustedIndex];
             final dayEntries = grouped[date]!;
 
             return Column(
