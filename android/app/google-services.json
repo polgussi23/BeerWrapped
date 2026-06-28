@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922270859171",
+    "project_id": "birra-wrapped",
+    "storage_bucket": "birra-wrapped.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922270859171:android:f640ec4eb598cd06e82416",
+        "android_client_info": {
+          "package_name": "cat.polgussi.birrawrapped"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjVIyqC1zt6x-6jyPRYu4X-rEPPs9HDW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

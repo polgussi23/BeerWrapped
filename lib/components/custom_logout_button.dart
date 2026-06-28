@@ -11,9 +11,10 @@ class LogoutButton extends StatelessWidget {
 
   void closeSession(BuildContext context) async {
     final logoutService = LogoutService();
+    final userId = context.read<UserProvider>().getUserId();
     try {
-      await logoutService
-          .logoutUser(context.read<UserProvider>().getRefreshToken());
+      await logoutService.logoutUser(
+          context.read<UserProvider>().getRefreshToken(), userId);
     } catch (e) {
       print('Error logging out: $e');
     }

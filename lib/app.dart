@@ -15,6 +15,9 @@ import 'package:birrawrapped/screens/splash_screen.dart';
 import 'package:birrawrapped/screens/verify_email_screen.dart';
 import 'package:birrawrapped/screens/waitToStart_screen.dart';
 import 'package:birrawrapped/screens/wrapped/wrapped_screen.dart';
+import 'package:birrawrapped/services/notificaction_router.dart';
+import 'package:birrawrapped/services/notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
@@ -36,6 +39,34 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initDeepLinks();
+    _initNotificationTokenListener();
+    _initNotificationTapHandling();
+  }
+
+  void _initNotificationTapHandling() {
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      _handleNotificationTap(message);
+    });
+  }
+
+  void _handleNotificationTap(RemoteMessage message) {
+    final destination = NotificationRouter.resolve(message);
+    if (destination != null) {
+      _navigatorKey.currentState?.pushNamed(
+        destination.route,
+        arguments: destination.arguments,
+      );
+    }
+  }
+
+  void _initNotificationTokenListener() {
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      final userProvider = context.read<UserProvider>();
+      final userId = userProvider.getUserId();
+      if (userId != null) {
+        NotificactionService().addUserDeviceToken(userId, newToken);
+      }
+    });
   }
 
   Future<void> _initDeepLinks() async {

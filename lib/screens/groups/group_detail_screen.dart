@@ -4,14 +4,12 @@ import 'package:birrawrapped/components/groups/group_history_tab.dart';
 import 'package:birrawrapped/components/groups/group_meetups_tab.dart';
 import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/loading_screen.dart';
+import 'package:birrawrapped/models/group_detail_args.dart';
 import 'package:birrawrapped/models/group_user_info.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
 import 'package:birrawrapped/services/groups_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:share_plus/share_plus.dart';
 
 class GroupDetailScreen extends StatefulWidget {
   const GroupDetailScreen({Key? key}) : super(key: key);
@@ -21,9 +19,12 @@ class GroupDetailScreen extends StatefulWidget {
 }
 
 class _GroupDetailScreenState extends State<GroupDetailScreen> {
+  Map<String, dynamic>? _group;
   GroupUserInfo? _groupUserInfo;
   bool _isLoadingUserInfo = true;
+  bool _isLoadingGroup = true;
   bool _initialized = false;
+  int _initialTabIndex = 0;
 
   @override
   void initState() {
@@ -37,9 +38,39 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     super.didChangeDependencies();
     if (!_initialized) {
       _initialized = true;
-      final group =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-      _getUserInfo(group['id'].toString());
+      final args = ModalRoute.of(context)!.settings.arguments;
+
+      if (args is Map<String, dynamic>) {
+        // Cas normal: ja venim amb tot el grup (des de la llista)
+        _group = args;
+        _isLoadingGroup = false;
+        _getUserInfo(_group!['id'].toString());
+      } else if (args is GroupDetailArgs) {
+        _initialTabIndex = args.initialTab;
+        _loadGroupById(args.groupId);
+      } else if (args is String) {
+        // Cas notificació: només tenim l'id
+        _loadGroupById(args);
+      }
+    }
+  }
+
+  Future<void> _loadGroupById(String groupId) async {
+    try {
+      final userId = context.read<UserProvider>().getUserId();
+      final groups = await GroupsService().getAllUserGroups(userId.toString());
+      final group = groups.firstWhere((g) => g['id'].toString() == groupId);
+
+      if (!mounted) return;
+      setState(() {
+        _group = group;
+        _isLoadingGroup = false;
+      });
+      _getUserInfo(groupId);
+    } catch (e) {
+      if (!mounted) return;
+      // Si falla (grup no trobat, etc.), tornem enrere
+      Navigator.pop(context);
     }
   }
 
@@ -349,18 +380,18 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final group =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    //final group =
+    //    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    if (_isLoadingUserInfo) {
-      return LoadingScreen(
-        text: "Carregant grup...",
-        title: group['name'],
-      );
+    if (_isLoadingGroup || _isLoadingUserInfo) {
+      return const LoadingScreen(text: "Carregant grup...");
     }
+
+    final group = _group!;
 
     return DefaultTabController(
       length: 2,
+      initialIndex: _initialTabIndex,
       child: Scaffold(
         body: Stack(
           children: [

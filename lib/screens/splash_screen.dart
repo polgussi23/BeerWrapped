@@ -1,6 +1,9 @@
 import 'package:birrawrapped/components/custom_background.dart';
 import 'package:birrawrapped/components/custom_title.dart';
 import 'package:birrawrapped/providers/user_provider.dart';
+import 'package:birrawrapped/services/notificaction_router.dart';
+import 'package:birrawrapped/services/notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:birrawrapped/services/sync_service.dart';
@@ -113,6 +116,10 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacementNamed(context, '/login');
       return;
     }
+
+    await _registerDeviceToken(up.getUserId()!);
+    await _handleInitialNotification();
+
     if (!up.isEmailVerified()!) {
       Navigator.pushReplacementNamed(context, '/validateEmail');
       return;
@@ -141,7 +148,30 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     SyncService().syncPending();
+
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      final destination = NotificationRouter.resolve(initialMessage);
+      if (destination != null) {
+        Navigator.pushReplacementNamed(
+          context,
+          destination.route,
+          arguments: destination.arguments,
+        );
+        return;
+      }
+    }
+
     Navigator.pushReplacementNamed(context, '/home');
+  }
+
+  Future<void> _handleInitialNotification() async {
+    final message = await FirebaseMessaging.instance.getInitialMessage();
+    if (message != null && message.data['type'] == 'meetup') {
+      final groupId = message.data['groupId'];
+      // Guarda-ho per navegar-hi DESPRÉS que el splash decideixi la ruta normal
+      // (per exemple, en una variable o al UserProvider)
+    }
   }
 
   @override
@@ -166,5 +196,26 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _registerDeviceToken(int userId) async {
+    try {
+      final settings = await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+        return; // l'usuari ha denegat, no continuem
+      }
+
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        await NotificactionService().addUserDeviceToken(userId, token);
+      }
+    } catch (e) {
+      debugPrint('Error registrant device token: $e');
+    }
   }
 }
