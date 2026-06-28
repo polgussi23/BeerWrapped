@@ -143,7 +143,7 @@ class GroupsService {
   }
 
   Future<void> removeMember(int groupId, int userId) async {
-    await _client.delete('/api/groups/$groupId/members/$userId');
+    await _client.delete('/api/groups/$groupId/members/$userId', {});
   }
 
   Future<void> updateMemberRole(

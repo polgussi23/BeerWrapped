@@ -134,14 +134,15 @@ class ApiClient {
     return _processResponse(response);
   }
 
-  Future<dynamic> delete(String endpoint) async {
+  Future<dynamic> delete(String endpoint, Map<String, dynamic> body) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final response =
-        await http.delete(uri, headers: _headers).timeout(TIMEOUT_DURATION);
+    final response = await http
+        .delete(uri, headers: _headers, body: jsonEncode(body))
+        .timeout(TIMEOUT_DURATION);
 
     if (response.statusCode == 401 || response.statusCode == 403) {
       final refreshed = await _tryRefreshToken();
-      if (refreshed) return delete(endpoint);
+      if (refreshed) return delete(endpoint, body);
     }
 
     return _processResponse(response);
