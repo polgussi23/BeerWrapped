@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter/services.dart';
 
 class GroupQrDialog {
   /// Mostra el diàleg amb el QR i el codi d'accés del grup.
@@ -89,15 +90,20 @@ class _GroupQrDialogContent extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(
-                    code,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'Kameron',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 3,
+                  GestureDetector(
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(text: code));
+                    },
+                    child: Text(
+                      code,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Kameron',
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 3,
+                      ),
                     ),
                   ),
                   const Text(
